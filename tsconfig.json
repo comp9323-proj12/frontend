@@ -1,36 +1,36 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "outDir": "build/dist",
     "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "jsx": "react-jsx",
-    "esModuleInterop": true,
+    "target": "es2016",
+    "lib": ["es6", "dom"],
     "sourceMap": true,
-    "baseUrl": "./",
-    "strict": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "rootDirs": ["/src", "/test", "/mock", "./typings"],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"]
-    },
-    "allowSyntheticDefaultImports": true
+      "@/*": ["./src/*"],
+      "@@/*": ["./src/.umi/*"]
+    }
   },
-  "include": [
-    "mock/**/*",
-    "src/**/*",
-    "config/**/*",
-    ".umirc.ts",
-    "typings.d.ts"
-  ],
+  "include": ["./src"],
   "exclude": [
     "node_modules",
-    "lib",
-    "es",
-    "dist",
-    "typings",
-    "**/__test__",
-    "test",
-    "docs",
-    "tests"
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts",
+    "tslint:latest",
+    "tslint-config-prettier"
   ]
 }
