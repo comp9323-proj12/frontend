@@ -10,7 +10,7 @@ const Login = {
     *login({ payload }, { call, put }) {
       const response = yield call(loginUser, payload);
       if (response.status === 200) {
-        // TODO: suppose response is like { status:200, userId:xxxxxx } or 404
+        // TODO: suppose response is like { status:200, data:{userId:xxxxxx} } or 404
         yield put({
           type: 'listCurrentUser',
           payload: response.data.userId,

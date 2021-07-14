@@ -33,14 +33,8 @@ const LoginPage = ({ dispatch, currentUser }) => {
         <Form
           name="login"
           className={styles['login__form']}
-          labelCol={{
-            span: 6,
-          }}
           wrapperCol={{
             span: 18,
-          }}
-          initialValues={{
-            remember: true,
           }}
           onFinish={onFinish}
         >
