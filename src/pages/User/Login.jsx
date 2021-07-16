@@ -4,7 +4,7 @@ import { Button, Carousel, Row, Col, Modal, Form, Input } from 'antd';
 import styles from './Login.less';
 import { isEmpty } from 'lodash';
 
-const LoginPage = ({ dispatch, currentUser }) => {
+const Login = ({ dispatch, currentUser }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const onFinish = async (values) => {
     await dispatch({
@@ -91,7 +91,7 @@ const LoginPage = ({ dispatch, currentUser }) => {
         visible={isModalVisible}
         onCancel={handleCancel}
       >
-        <p>Login Failed, please check your username and password!</p>
+        <p>Login failed, please check your username and password!</p>
       </Modal>
     </Row>
   );
@@ -99,4 +99,4 @@ const LoginPage = ({ dispatch, currentUser }) => {
 
 export default connect(({ login: { currentUser } }) => ({
   currentUser,
-}))(LoginPage);
+}))(Login);
