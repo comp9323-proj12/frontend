@@ -1,12 +1,21 @@
 import { loginUser } from '@/services/user';
-
+import {
+  put as storePut,
+  get as storeGet,
+  patch as storePatch,
+  del as storeDel,
+} from '@/utils/storageHelper';
 // login是一个比较特殊的model，理论上所有model都应该是一个名词或者一个role，所以login行为理论上应该属于user model里的。
 // 但是因为现实中的login的逻辑会非常复杂，写在user里就太冗长了，所以会单独提出来。虽然咱的login非常简单，但是形式上我还是单独提出来了。
 const Login = {
   namespace: 'login',
   state: {
     // TODO: 返回常用的当前用户信息，包括id,头像等
-    currentUser: {},
+    // 暂时先给一个初始用户，方便后续开发
+    currentUser: {
+      userName: 'Xiaorong Lin',
+      id: '123456',
+    },
   },
   effects: {
     // Send { userName:xxx, password:xxx } to backend
@@ -20,6 +29,11 @@ const Login = {
         });
       }
     },
+    *logout(_, { call, put }) {
+      yield put({
+        type: 'clearCurrentUser',
+      });
+    },
   },
 
   reducers: {
@@ -28,6 +42,12 @@ const Login = {
       return {
         ...state,
         currentUser: payload,
+      };
+    },
+    clearCurrentUser(state, _) {
+      return {
+        ...state,
+        currentUser: {},
       };
     },
   },

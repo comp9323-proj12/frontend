@@ -23,6 +23,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
     "axios": "^0.21.1",
+    "moment": "^2.29.1",
     "umi": "^3.4.25"
   },
   "devDependencies": {

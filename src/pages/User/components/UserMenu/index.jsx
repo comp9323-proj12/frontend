@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { connect, Link, Dispatch } from 'umi';
+import { connect, Link } from 'umi';
 import {
   Menu,
   Dropdown,
   Avatar,
   Modal,
   Form,
+  Input,
   DatePicker,
   TimePicker,
+  Button,
 } from 'antd';
+import moment from 'moment';
 
-const UserMenu = ({ currentUser }) => {
+const UserMenu = ({ currentUser, dispatch }) => {
   const [isTextModalVisible, setIsTextModalVisible] = useState(false);
   const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
   const [isMeetingModalVisible, setIsMeetingModalVisible] = useState(false);
@@ -18,6 +21,12 @@ const UserMenu = ({ currentUser }) => {
     setIsTextModalVisible(false);
     setIsVideoModalVisible(false);
     setIsMeetingModalVisible(false);
+  };
+  const logout = (_) => {
+    dispatch({
+      type: 'login/logout',
+    });
+    return 'adas';
   };
   const handleClick = (operation) => {
     const operationMap = {
@@ -28,11 +37,6 @@ const UserMenu = ({ currentUser }) => {
       logout: logout,
     };
     operationMap[operation](true);
-  };
-  const logout = (_) => {
-    dispatch({
-      type: 'login/logout',
-    });
   };
   const routeProfile = (_) => {
     dispatch({
@@ -47,6 +51,10 @@ const UserMenu = ({ currentUser }) => {
     wrapperCol: {
       span: 16,
     },
+  };
+  //   TODO: post data to backend
+  const onFinish = () => {
+    return '';
   };
   const menu = (
     <>
@@ -179,10 +187,7 @@ const UserMenu = ({ currentUser }) => {
             <Input defaultValue={currentUser.userName} />
           </Form.Item>
           <Form.Item label="Time">
-            <TimePicker
-              onChange={onChange}
-              defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
-            />
+            <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button type="primary" htmlType="submit">
