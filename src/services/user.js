@@ -7,3 +7,10 @@ export async function loginUser(data) {
     data,
   });
 }
+
+export async function getResearchers() {
+  return request({
+    method: 'GET',
+    url: '/api/users/researchers',
+  });
+}
