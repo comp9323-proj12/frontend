@@ -1,7 +1,7 @@
 const Page = {
   namespace: 'page',
   state: {
-    page: 'home',
+    currentPage: 'home',
   },
   effects: {
     *routeComponent({ payload }, { _, put }) {
@@ -17,7 +17,7 @@ const Page = {
       const { payload } = action;
       return {
         ...state,
-        page: payload,
+        currentPage: payload,
       };
     },
   },

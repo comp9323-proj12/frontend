@@ -10,7 +10,7 @@ import UserMenu from '../User/components/UserMenu';
 import ResearcherHomePage from '../Researcher/ResearcherHomePage';
 import ResearcherList from '../Researcher/ResearcherList';
 
-const Home = ({ dispatch, currentUser, page }) => {
+const Home = ({ dispatch, currentUser, currentPage }) => {
   const routeMap = {
     home: <ResearcherList />,
     researcher: <ResearcherHomePage />,
@@ -30,12 +30,12 @@ const Home = ({ dispatch, currentUser, page }) => {
           <UserMenu />
         </Col>
       </Row>
-      {routeMap[page]}
+      {routeMap[currentPage]}
     </>
   );
 };
 
-export default connect(({ login: { currentUser }, page: { page } }) => ({
+export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
   currentUser,
-  page,
+  currentPage,
 }))(Home);

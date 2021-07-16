@@ -11,9 +11,7 @@ const ResearcherList = ({ dispatch, researchers }) => {
   const handleClickResearcher = () => {
     dispatch({
       type: 'page/routeComponent',
-      payload: {
-        page: 'researcher',
-      },
+      payload: 'researcher',
     });
   };
   return (
