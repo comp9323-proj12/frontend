@@ -26,7 +26,6 @@ const UserMenu = ({ currentUser, dispatch }) => {
     dispatch({
       type: 'login/logout',
     });
-    return 'adas';
   };
   const handleClick = (operation) => {
     const operationMap = {
