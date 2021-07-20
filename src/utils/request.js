@@ -2,8 +2,7 @@ import axios from 'axios';
 import { notification } from 'antd';
 import { history, getDvaApp } from 'umi';
 
-// TODO:谁有工夫把这些玩意翻译成英文呗，其实不一定都会用到，但是我也不确定哪些一定不会用。。
-const codeMessage = {
+/* const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
@@ -19,7 +18,26 @@ const codeMessage = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
+}; */
+
+const codeMessage = {
+  200: 'The server successfully returned the requested data.',
+  201: 'New or modified data is successful.',
+  202: 'A request has entered the background queue (asynchronous task).',
+  204: 'Data Deleted Successfully',
+  400: 'There was an error in the request sent, and the server did not create or modify data. ',
+  401: 'The user does not have permission (token, username, password error).',
+  403: 'The user is authorized, but access is forbidden.',
+  404: 'The request sent was for a record that did not exist.',
+  406: 'The requested format is not available.',
+  410: 'The requested resource is permanently deleted and will no longer be available.',
+  422: 'When creating an object, a validation error occurred.',
+  500: 'An error occurred on the server, please check the server. ',
+  502: 'Gateway error.',
+  503: 'The service is unavailable. The server is currently unavailable (overloaded or down).',
+  504: 'Gateway Timeout',
 };
+
 export const baseURL = 'http://localhost:4000/';
 const withCredentials = true;
 const timeout = 30000;
@@ -30,6 +48,7 @@ const axiosInstance = axios.create({
   timeout,
 });
 
+// 添加请求拦截器 在发送请求之前做些什么
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('token') || '';
   /* eslint-disable no-param-reassign */
@@ -37,6 +56,7 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// 添加响应拦截器 对响应数据做点什么
 axiosInstance.interceptors.response.use(
   (response) => {
     const contentType = response.headers['content-type'];
@@ -48,19 +68,24 @@ axiosInstance.interceptors.response.use(
       localStorage.setItem('token', response.data.token);
     }
     return Promise.resolve(response);
-  },
+  }, // 对响应错误做点什么
   (error) => {
     const { response } = error;
     const { status } = response;
     if (status !== 401) {
       notification.error({
+        //通知提醒标题，必选
         message: response.data.message || codeMessage[status],
-        duration: 10,
+        duration: 10, //默认 4.5 秒后自动关闭，配置为 null 则不自动关闭
       });
     }
     if (status === 401) {
+      //用户没有权限
       // @HACK
       /* eslint-disable no-underscore-dangle */
+      /* Action 很简单，就是一个单纯的包含 { type, payload } 的对象，
+      type 是一个常量用来标示动作类型，payload 是这个动作携带的数据。
+      Action 需要通过 store.dispatch() 方法来发送。 */
       getDvaApp()._store.dispatch({
         type: 'login/logout',
         payload: {
