@@ -113,6 +113,7 @@ export const createSessionStorage = (key, value) => {
 };
 
 export const getSessionStorage = (key) => {
+  console.log('sessionStorage.getItem(key)', sessionStorage.getItem(key));
   return JSON.parse(sessionStorage.getItem(key));
 };
 

@@ -2,6 +2,7 @@ const Page = {
   namespace: 'page',
   state: {
     currentPage: 'home',
+    activateContent: {},
   },
   effects: {
     *routeComponent({ payload }, { _, put }) {
@@ -14,10 +15,13 @@ const Page = {
 
   reducers: {
     routePage(state, action) {
-      const { payload } = action;
+      const {
+        payload: { currentPage, activateContent },
+      } = action;
       return {
         ...state,
-        currentPage: payload,
+        currentPage,
+        activateContent,
       };
     },
   },

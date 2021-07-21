@@ -6,13 +6,15 @@ import { isEmpty } from 'lodash';
 // import Logo from '../components/Logo';
 // import SearchBar from '../components/SearchBar';
 import UserMenu from '../User/components/UserMenu';
-// import ResearcherHomePage from '../Researcher/ResearcherHomePage';
+import ResearcherHomePage from '../Researcher/ResearcherHomePage';
 import ResearcherList from '../Researcher/ResearcherList';
+import ResearcherItem from '@/pages/Researcher/components/researcherItem';
 
-const Home = ({ dispatch, currentUser, currentPage }) => {
+const Home = ({ dispatch, currentPage, activeContent }) => {
   const routeMap = {
     home: <ResearcherList />,
-    // researcher: <ResearcherHomePage />,
+    researcher: <ResearcherHomePage user={activeContent} />,
+    researcherItem: <ResearcherItem item={activeContent} />,
   };
 
   return (
@@ -30,7 +32,10 @@ const Home = ({ dispatch, currentUser, currentPage }) => {
   );
 };
 
-export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
-  currentUser,
-  currentPage,
-}))(Home);
+export default connect(
+  ({ login: { currentUser }, page: { currentPage, activeContent } }) => ({
+    currentUser,
+    currentPage,
+    activeContent,
+  }),
+)(Home);

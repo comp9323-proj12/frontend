@@ -12,11 +12,13 @@ import {
   Button,
 } from 'antd';
 import moment from 'moment';
+import { getSessionStorage } from '@/utils/storageHelper';
 
-const UserMenu = ({ currentUser, dispatch }) => {
+const UserMenu = ({ dispatch }) => {
   const [isTextModalVisible, setIsTextModalVisible] = useState(false);
   const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
   const [isMeetingModalVisible, setIsMeetingModalVisible] = useState(false);
+  const currentUser = getSessionStorage('currentUser');
   const handleCancel = () => {
     setIsTextModalVisible(false);
     setIsVideoModalVisible(false);
@@ -59,6 +61,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
     <>
       <Menu>
         <Menu.Item
+          key="profile"
           onClick={() => {
             handleClick('profile');
           }}
@@ -66,6 +69,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
           My Profile
         </Menu.Item>
         <Menu.Item
+          key="text"
           onClick={() => {
             handleClick('text');
           }}
@@ -73,6 +77,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
           Upload Text Story
         </Menu.Item>
         <Menu.Item
+          key="video"
           onClick={() => {
             handleClick('video');
           }}
@@ -80,6 +85,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
           Upload Video Story
         </Menu.Item>
         <Menu.Item
+          key="meeting"
           onClick={() => {
             handleClick('meeting');
           }}
@@ -88,6 +94,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
         </Menu.Item>
         <Menu.Item
           danger
+          key="logout"
           onClick={() => {
             handleClick('logout');
           }}
@@ -183,7 +190,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
             <DatePicker />
           </Form.Item>
           <Form.Item label="Host">
-            <Input defaultValue={currentUser.userName} />
+            <Input defaultValue={currentUser.name} />
           </Form.Item>
           <Form.Item label="Time">
             <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
