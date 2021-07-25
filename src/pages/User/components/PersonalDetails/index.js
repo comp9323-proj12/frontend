@@ -10,7 +10,7 @@ export const PersonalDetails = ({ user }) => {
       </Col>
       <Col span={16}>
         <h4>Research Area</h4>
-        {user.researchArea.map((item) => {
+        {user?.researchArea?.map((item) => {
           <Tag>{item}</Tag>;
         })}
         {/* TODO: 这块显示他的什么信息 */}

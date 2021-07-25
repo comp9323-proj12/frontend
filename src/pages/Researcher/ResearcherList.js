@@ -12,11 +12,12 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
     });
   }, []);
   const handleClickResearcher = (item) => {
+    console.log('item', item);
     dispatch({
       type: 'page/routeComponent',
       payload: {
         currentPage: 'researcher',
-        activeContent: item,
+        activateContent: item,
       },
     });
     // setUser(item)
@@ -27,7 +28,7 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
       size="large"
       grid={{
         gutter: 16,
-        xs: 1,
+        xs: 2,
         sm: 2,
         md: 4,
         lg: 4,
@@ -35,7 +36,7 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
         xxl: 4,
       }}
       pagination={{
-        pageSize: 4,
+        pageSize: 8,
       }}
       dataSource={researchers}
       renderItem={(item) => (

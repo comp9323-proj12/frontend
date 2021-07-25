@@ -13,17 +13,12 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { getSessionStorage } from '@/utils/storageHelper';
+import UploadMaterialModal from '@/pages/components/UploadMaterialModal';
 
 const UserMenu = ({ dispatch }) => {
-  const [isTextModalVisible, setIsTextModalVisible] = useState(false);
-  const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
-  const [isMeetingModalVisible, setIsMeetingModalVisible] = useState(false);
+  const [currentModal, setCurrentModal] = useState('');
   const currentUser = getSessionStorage('currentUser');
-  const handleCancel = () => {
-    setIsTextModalVisible(false);
-    setIsVideoModalVisible(false);
-    setIsMeetingModalVisible(false);
-  };
+  const [visible, setVisible] = useState(false);
   const logout = (_) => {
     dispatch({
       type: 'login/logout',
@@ -32,17 +27,22 @@ const UserMenu = ({ dispatch }) => {
   const handleClick = (operation) => {
     const operationMap = {
       profile: routeProfile,
-      text: setIsTextModalVisible,
-      video: setIsVideoModalVisible,
-      meeting: setIsMeetingModalVisible,
+      article: setCurrentModal,
+      video: setCurrentModal,
+      meeting: setCurrentModal,
       logout: logout,
     };
-    operationMap[operation](true);
+    console.log('operation', operation);
+    operationMap[operation](operation);
+    setVisible(false);
   };
   const routeProfile = (_) => {
     dispatch({
       type: 'page/routeComponent',
-      payload: 'profile',
+      payload: {
+        currentPage: 'researcher',
+        activateContent: currentUser,
+      },
     });
   };
   const layout = {
@@ -53,9 +53,8 @@ const UserMenu = ({ dispatch }) => {
       span: 16,
     },
   };
-  //   TODO: post data to backend
-  const onFinish = () => {
-    return '';
+  const closeCurrentModal = () => {
+    setCurrentModal('');
   };
   const menu = (
     <>
@@ -69,9 +68,9 @@ const UserMenu = ({ dispatch }) => {
           My Profile
         </Menu.Item>
         <Menu.Item
-          key="text"
+          key="article"
           onClick={() => {
-            handleClick('text');
+            handleClick('article');
           }}
         >
           Upload Text Story
@@ -102,13 +101,17 @@ const UserMenu = ({ dispatch }) => {
           Logout
         </Menu.Item>
       </Menu>
-      <Modal
+      <UploadMaterialModal
+        currentModal={currentModal}
+        closeCurrentModal={closeCurrentModal}
+      />
+      {/* <Modal
         title="Upload Text Story"
         visible={isTextModalVisible}
         footer={null}
         onCancel={handleCancel}
       >
-        <Form {...layout} name="text" onFinish={onFinish}>
+        <Form {...layout} name="article" onFinish={onFinishText}>
           <Form.Item
             name="title"
             label="Title"
@@ -121,9 +124,11 @@ const UserMenu = ({ dispatch }) => {
           >
             <Input />
           </Form.Item>
-          {/* TODO: tag */}
-          <Form.Item name="content" label="Content">
+          <Form.Item name="text" label="Content">
             <Input.TextArea />
+          </Form.Item>
+          <Form.Item name="tags" label="Tags">
+
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button type="primary" htmlType="submit">
@@ -201,11 +206,19 @@ const UserMenu = ({ dispatch }) => {
             </Button>
           </Form.Item>
         </Form>
-      </Modal>
+      </Modal> */}
     </>
   );
+  const handleVisibleChange = (flag) => {
+    setVisible(flag);
+  };
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown
+      overlay={menu}
+      trigger={['click']}
+      onVisibleChange={handleVisibleChange}
+      visible={visible}
+    >
       <Avatar />
     </Dropdown>
   );

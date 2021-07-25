@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect, Link, Dispatch } from 'umi';
 import {
   Button,
@@ -17,39 +17,47 @@ import styles from './Login.less';
 import { isEmpty } from 'lodash';
 import { getSessionStorage } from '@/utils/storageHelper';
 
-const Login = ({ dispatch, registerFlag }) => {
+const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
   const currentUser = getSessionStorage('currentUser');
   console.log('currentUsercurrentUser', currentUser);
-  const [isLoginModalVisible, setIsLoginModalVisible] = useState(false);
   const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const mounted = useRef();
   useEffect(() => {
-    if (currentUser === {}) {
-      renderLoginModal();
+    if (mounted.current) {
+      if (registerFlag === null) {
+        notification.error({
+          message: 'Server Error',
+          description:
+            'Oops! There is something wrong with our server, please try later!',
+        });
+      } else if (registerFlag === false) {
+        notification.warning({
+          message: 'Register Failed',
+          description: 'E-mail already exists, please input a new one!',
+        });
+      } else if (registerFlag === true) {
+        notification.success({
+          message: 'Register Success!',
+          duration: 1,
+        });
+        handleCancel();
+      }
+    } else {
+      mounted.current = true;
     }
-    if (registerFlag === null) {
-      notification.error({
-        message: 'Network Error',
-        description:
-          'Oops! There is something wrong with our server, please try later!',
-      });
-    } else if (registerFlag === false) {
-      notification.warning({
-        message: 'Register Failed',
-        description: 'E-mail already exists, please input a new one!',
-      });
-    } else if (registerFlag === true) {
-      notification.success({
-        message: 'Register Success!',
-      });
-      handleCancel();
-    }
-  }, [currentUser, registerFlag]);
-  const onLoginFinish = (values) => {
-    dispatch({
+  }, [reversalRegistered]);
+  const onLoginFinish = async (values) => {
+    await dispatch({
       type: 'login/login',
       payload: values,
     });
+    if (JSON.stringify(getSessionStorage('currentUser')) === '{}') {
+      notification.error({
+        message: 'Login Failed',
+        description: 'Login failed, please check your E-mail and password!',
+      });
+    }
   };
 
   const onRegisterFinish = (values) => {
@@ -68,7 +76,6 @@ const Login = ({ dispatch, registerFlag }) => {
     setIsRegisterModalVisible(true);
   };
   const handleCancel = () => {
-    setIsLoginModalVisible(false);
     setIsRegisterModalVisible(false);
   };
   return (
@@ -143,21 +150,23 @@ const Login = ({ dispatch, registerFlag }) => {
           </Form.Item>
         </Form>
       </Col>
-      <Modal
+      {/* <Modal
         title="Login Failed"
         footer={null}
         visible={isLoginModalVisible}
         onCancel={handleCancel}
       >
         <p>Login failed, please check your username and password!</p>
-      </Modal>
+      </Modal> */}
       <Modal
         title="Register"
         footer={null}
+        destroyOnClose={true}
         visible={isRegisterModalVisible}
         onCancel={handleCancel}
       >
         <Form
+          preserve={false}
           form={form}
           name="register"
           className={styles['register__form']}
@@ -331,7 +340,10 @@ const Login = ({ dispatch, registerFlag }) => {
   );
 };
 
-export default connect(({ login: { currentUser, registerFlag } }) => ({
-  currentUser,
-  registerFlag,
-}))(Login);
+export default connect(
+  ({ login: { currentUser, registerFlag, reversalRegistered } }) => ({
+    currentUser,
+    registerFlag,
+    reversalRegistered,
+  }),
+)(Login);

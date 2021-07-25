@@ -1,59 +1,66 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 // import styles from './index.less';
-import { List } from 'antd';
+import { List, Tag } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
-const researchTabs = ({
+import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
+const ResearchTabs = ({
   dispatch,
-  key,
+  content,
   user,
-  articles,
-  videos,
-  meetings,
+  userArticles,
+  userVideos,
+  userMeetings,
   currentPage,
 }) => {
   const [listData, setListData] = useState([]);
-  useEffect(() => {
-    keyMap[key]();
-  }, key);
-  useEffect(() => {
-    setListData(articles);
-  }, articles);
-  useEffect(() => {
-    setListData(videos);
-  }, videos);
-  useEffect(() => {
-    setListData(meetings);
-  }, meetings);
-  const renderItemPage = (item) => {
-    dispatch({
-      type: 'page/routeComponent',
-      payload: {
-        currentPage: 'researcherItem',
-        activeContent: item,
-      },
-    });
+  const [visible, setVisible] = useState(false);
+  const [modalItem, setModalItem] = useState({});
+  const handleCancel = () => {
+    setVisible(false);
   };
-  const keyMap = {
-    text: async () => {
+  const contentMap = {
+    article: async () => {
+      console.log('user._iduser._id', user);
       await dispatch({
-        type: 'articles/fetchArticlesByUserId',
+        type: 'article/fetchArticlesByUserId',
         payload: user._id,
       });
+      // setListData(userArticles);
     },
     video: async () => {
       await dispatch({
-        type: 'videos/fetchVideosByUserId',
+        type: 'video/fetchVideosByUserId',
         payload: user._id,
       });
+      // setListData(userVideos);
     },
     meeting: async () => {
       await dispatch({
-        type: 'meetings/fetchMeetingByUserId',
-        payload: user,
+        type: 'meeting/fetchMeetingByUserId',
+        payload: user._id,
       });
+      // setListData(userMeetings);
     },
   };
+  useEffect(() => {
+    contentMap[content]();
+  }, []);
+  useEffect(() => {
+    setListData(userArticles);
+  }, [userArticles]);
+  useEffect(() => {
+    setListData(userVideos);
+  }, [userVideos]);
+  useEffect(() => {
+    setListData(userArticles);
+  }, [userMeetings]);
+  const renderItemModal = (item) => {
+    setModalItem(item);
+    setVisible(true);
+  };
+  console.log('content', content);
+  console.log('listData', listData);
   return (
     <>
       <List
@@ -64,20 +71,48 @@ const researchTabs = ({
         dataSource={listData}
         renderItem={(item) => (
           <List.Item
-            key={item.title}
+            key={item._id}
             onClick={() => {
-              renderItemPage(item);
+              renderItemModal(item);
             }}
+            extra={item.tags.map((tag, index) => {
+              return (
+                <Tag key={index} color="blue">
+                  {tag}
+                </Tag>
+              );
+            })}
           >
-            {item.title}
+            {item.text && (
+              <List.Item.Meta
+                title={item.title}
+                description={
+                  item.text.length > 50
+                    ? item.text.slice(50) + '...'
+                    : item.text
+                }
+              />
+            )}
           </List.Item>
         )}
       ></List>
+      <ResearcherItem
+        visible={visible}
+        content={modalItem}
+        handleCancel={handleCancel}
+      />
     </>
   );
 };
 
-export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
-  currentUser,
-  currentPage,
-}))(researchTabs);
+export default connect(
+  ({
+    login: { currentUser },
+    page: { currentPage },
+    article: { userArticles },
+  }) => ({
+    currentUser,
+    currentPage,
+    userArticles,
+  }),
+)(ResearchTabs);

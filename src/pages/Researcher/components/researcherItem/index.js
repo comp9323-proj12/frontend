@@ -1,68 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 // import styles from './index.less';
-import { List } from 'antd';
+import { List, Row, Col, Modal } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 const researchItem = ({
   dispatch,
-  key,
   user,
   articles,
   videos,
   meetings,
+  activateContent,
   currentPage,
+  visible,
+  content,
+  handleCancel,
 }) => {
-  const [listData, setListData] = useState([]);
-  useEffect(() => {
-    keyMap[key]();
-  }, key);
-  useEffect(() => {
-    setListData(articles);
-  }, articles);
-  useEffect(() => {
-    setListData(videos);
-  }, videos);
-  useEffect(() => {
-    setListData(meetings);
-  }, meetings);
-  const renderItemPage = (item) => {
-    dispatch({
-      type: 'page/routeComponent',
-      payload: {
-        currentPage: 'researcherItem',
-        activeContent: item,
-      },
-    });
-  };
-  const keyMap = {
-    text: async () => {
-      await dispatch({
-        type: 'articles/fetchArticlesByUserId',
-        payload: user._id,
-      });
-    },
-    video: async () => {
-      await dispatch({
-        type: 'videos/fetchVideosByUserId',
-        payload: user._id,
-      });
-    },
-    meeting: async () => {
-      await dispatch({
-        type: 'meetings/fetchMeetingByUserId',
-        payload: user,
-      });
-    },
-  };
   return (
-    <>
-      <Row>文章</Row>
+    <Modal
+      visible={visible}
+      title={content.title}
+      destroyOnClose={true}
+      onCancel={handleCancel}
+      footer={null}
+      width={1200}
+    >
+      <Row>
+        <h4>{content.title}</h4>
+      </Row>
+      <Row>text author createTime tags question recap</Row>
       <Row>评论区</Row>
-    </>
+    </Modal>
   );
 };
 
-export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
-  currentUser,
-  currentPage,
-}))(researchItem);
+export default connect(
+  ({ login: { currentUser }, page: { currentPage, activateContent } }) => ({
+    currentUser,
+    currentPage,
+    activateContent,
+  }),
+)(researchItem);

@@ -1,11 +1,18 @@
+import {
+  createSessionStorage,
+  removeSessionStorage,
+  getSessionStorage,
+} from '@/utils/storageHelper';
+
 const Page = {
   namespace: 'page',
   state: {
-    currentPage: 'home',
+    currentPage: '',
     activateContent: {},
   },
   effects: {
     *routeComponent({ payload }, { _, put }) {
+      console.log('routeComponentpayload', payload);
       yield put({
         type: 'routePage',
         payload,
@@ -18,6 +25,8 @@ const Page = {
       const {
         payload: { currentPage, activateContent },
       } = action;
+      createSessionStorage('currentPage', currentPage);
+      createSessionStorage('activateContent', activateContent);
       return {
         ...state,
         currentPage,
