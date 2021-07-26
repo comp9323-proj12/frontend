@@ -16,9 +16,9 @@ export async function createMeeting(data) {
   });
 }
 
-export async function getResearchers() {
+export async function deleteMeeting(data) {
   return request({
-    method: 'GET',
-    url: '/users/researchers',
+    method: 'DELETE',
+    url: `/meetings/delete/${data}`,
   });
 }

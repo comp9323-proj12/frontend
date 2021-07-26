@@ -5,7 +5,6 @@ export async function getArticlesByUserId(data) {
   return request({
     method: 'GET',
     url: `/articles/user/${data}`,
-    data,
   });
 }
 
@@ -18,9 +17,9 @@ export async function createArticle(data) {
   });
 }
 
-export async function getResearchers() {
+export async function deleteArticle(data) {
   return request({
-    method: 'GET',
-    url: '/users/researchers',
+    method: 'DELETE',
+    url: `/articles/delete/${data}`,
   });
 }

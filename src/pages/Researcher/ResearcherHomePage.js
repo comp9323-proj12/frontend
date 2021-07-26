@@ -11,11 +11,14 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
   const [activateUser, setActivateUser] = useState({});
   const [isProfile, setIsProfile] = useState(false);
   const currentUser = getSessionStorage('currentUser');
+  const [tabContent, setTabContent] = useState('article');
   useEffect(() => {
     setActivateUser(getSessionStorage('activateContent'));
   }, [activateContent]);
   console.log('useruserv', activateUser);
-  const handleTabChange = (key) => {};
+  const handleTabChange = (key) => {
+    setTabContent(key);
+  };
   useEffect(() => {
     if (currentUser._id === activateContent._id) {
       setIsProfile(true);
@@ -30,21 +33,21 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
             <TabPane tab="Text Story" key="article">
               <ResearchTabs
                 user={activateUser}
-                content="article"
+                content={tabContent}
                 isProfile={isProfile}
               />
             </TabPane>
             <TabPane tab="Video Story" key="video">
               <ResearchTabs
                 user={activateUser}
-                content="video"
+                content={tabContent}
                 isProfile={isProfile}
               />
             </TabPane>
             <TabPane tab="Meeting" key="meeting">
               <ResearchTabs
                 user={activateUser}
-                content="meeting"
+                content={tabContent}
                 isProfile={isProfile}
               />
             </TabPane>

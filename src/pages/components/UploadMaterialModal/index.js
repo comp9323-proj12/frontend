@@ -179,9 +179,10 @@ const UploadMaterialModal = ({
         )}
         {currentModal === 'meeting' && (
           <>
-            <Form.Item name="notice" label="Notice">
+            {/* TODO:Notice是不是description */}
+            {/* <Form.Item name="notice" label="Notice">
               <Input.TextArea />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item name="startDate" label="Start Date">
               <DatePicker onChange={onDateChange} />
             </Form.Item>
@@ -193,6 +194,11 @@ const UploadMaterialModal = ({
         {(currentModal === 'video' || currentModal === 'meeting') && (
           <Form.Item name="link" label="Link">
             <Input />
+          </Form.Item>
+        )}
+        {(currentModal === 'video' || currentModal === 'meeting') && (
+          <Form.Item name="description" label="Description">
+            <Input.TextArea />
           </Form.Item>
         )}
         <Form.Item label="Tags">

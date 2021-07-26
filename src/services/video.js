@@ -15,9 +15,9 @@ export async function createVideo(data) {
   });
 }
 
-export async function getResearchers() {
+export async function deleteVideo(data) {
   return request({
-    method: 'GET',
-    url: '/users/researchers',
+    method: 'DELETE',
+    url: `/videos/delete/${data}`,
   });
 }

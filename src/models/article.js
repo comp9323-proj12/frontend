@@ -1,4 +1,8 @@
-import { getArticlesByUserId, createArticle } from '@/services/article';
+import {
+  getArticlesByUserId,
+  createArticle,
+  deleteArticle,
+} from '@/services/article';
 
 const Article = {
   namespace: 'article',
@@ -25,6 +29,9 @@ const Article = {
         type: 'putCreateArticleStatus',
         payload: response.status,
       });
+    },
+    *deleteArticle({ payload }, { call, put }) {
+      const response = yield call(deleteArticle, payload);
     },
   },
 

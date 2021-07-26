@@ -1,4 +1,8 @@
-import { getMeetingsByUserId, createMeeting } from '@/services/meeting';
+import {
+  getMeetingsByUserId,
+  createMeeting,
+  deleteMeeting,
+} from '@/services/meeting';
 
 const Meeting = {
   namespace: 'meeting',
@@ -8,7 +12,7 @@ const Meeting = {
     reversalMeetingStatus: false,
   },
   effects: {
-    *fetchMeetingsById({ payload }, { call, put }) {
+    *fetchMeetingsByUserId({ payload }, { call, put }) {
       const response = yield call(getMeetingsByUserId, payload);
       if (response.status === 200) {
         yield put({
@@ -16,6 +20,9 @@ const Meeting = {
           payload: response.data,
         });
       }
+    },
+    *deleteMeeting({ payload }, { call, put }) {
+      yield call(deleteMeeting, payload);
     },
     *createMeeting({ payload }, { call, put }) {
       const response = yield call(createMeeting, payload);
