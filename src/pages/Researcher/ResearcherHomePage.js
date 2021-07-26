@@ -20,10 +20,13 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
     setTabContent(key);
   };
   useEffect(() => {
-    if (currentUser._id === activateContent._id) {
+    console.log('isProileid', currentUser);
+    console.log(currentUser._id === activateContent._id);
+    console.log('activateUser', activateUser);
+    if (currentUser._id === activateUser._id) {
       setIsProfile(true);
     }
-  }, []);
+  }, [activateUser]);
   return (
     <>
       {!isEmpty(activateUser) && (

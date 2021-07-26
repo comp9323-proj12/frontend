@@ -2,6 +2,7 @@ import {
   getMeetingsByUserId,
   createMeeting,
   deleteMeeting,
+  updateMeeting,
 } from '@/services/meeting';
 
 const Meeting = {
@@ -23,6 +24,9 @@ const Meeting = {
     },
     *deleteMeeting({ payload }, { call, put }) {
       yield call(deleteMeeting, payload);
+    },
+    *updateMeeting({ payload }, { call, put }) {
+      yield call(updateMeeting, payload);
     },
     *createMeeting({ payload }, { call, put }) {
       const response = yield call(createMeeting, payload);

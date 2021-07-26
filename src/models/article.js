@@ -2,6 +2,7 @@ import {
   getArticlesByUserId,
   createArticle,
   deleteArticle,
+  updateArticle,
 } from '@/services/article';
 
 const Article = {
@@ -29,6 +30,9 @@ const Article = {
         type: 'putCreateArticleStatus',
         payload: response.status,
       });
+    },
+    *updateArticle({ payload }, { call, put }) {
+      yield call(updateArticle, payload);
     },
     *deleteArticle({ payload }, { call, put }) {
       const response = yield call(deleteArticle, payload);

@@ -16,6 +16,15 @@ export async function createMeeting(data) {
   });
 }
 
+export async function updateMeeting(data) {
+  console.log('dataasycn', data);
+  return request({
+    method: 'PATCH',
+    url: `/meetings/${data.instructor}`,
+    data,
+  });
+}
+
 export async function deleteMeeting(data) {
   return request({
     method: 'DELETE',

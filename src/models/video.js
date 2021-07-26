@@ -1,4 +1,9 @@
-import { getVideosByUserId, createVideo, deleteVideo } from '@/services/video';
+import {
+  getVideosByUserId,
+  createVideo,
+  deleteVideo,
+  updateVideo,
+} from '@/services/video';
 
 const Video = {
   namespace: 'video',
@@ -23,6 +28,9 @@ const Video = {
         type: 'putCreateVideoStatus',
         payload: response.status,
       });
+    },
+    *updateVideo({ payload }, { call, put }) {
+      yield call(updateVideo, payload);
     },
     *deleteVideo({ payload }, { call, put }) {
       const response = yield call(deleteVideo, payload);

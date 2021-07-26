@@ -15,6 +15,15 @@ export async function createVideo(data) {
   });
 }
 
+export async function updateVideo(data) {
+  console.log('dataasycn', data);
+  return request({
+    method: 'PATCH',
+    url: `/videos/${data.author}`,
+    data,
+  });
+}
+
 export async function deleteVideo(data) {
   return request({
     method: 'DELETE',
