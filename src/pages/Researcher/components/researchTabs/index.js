@@ -171,7 +171,7 @@ const ResearchTabs = ({
   useEffect(() => {
     console.log('1123');
     contentMap[content]();
-  }, []);
+  }, [user]);
   useEffect(() => {
     const tabMap = {
       article: userArticles,
@@ -271,6 +271,7 @@ const ResearchTabs = ({
                         : 'article',
                     );
                     editForm.setFieldsValue(item);
+                    setProfileItem(item);
                     setEditModalVisible(true);
                   }}
                 >
@@ -294,6 +295,7 @@ const ResearchTabs = ({
       <ResearcherItem
         visible={visible}
         content={modalItem}
+        user={user}
         handleCancel={handleCancel}
       />
       <Modal
@@ -368,7 +370,7 @@ const ResearchTabs = ({
         {console.log('profileItemprofileItem', profileItem)}
         <Form
           {...layout}
-          initialValues={profileItem}
+          //   initialValues={}
           name={currentModal}
           onFinish={onEditFinish}
           form={editForm}

@@ -20,7 +20,7 @@ export async function updateArticle(data) {
   console.log('dataasycn', data);
   return request({
     method: 'PATCH',
-    url: `/articles/${data.author}`,
+    url: `/articles/${data._id}`,
     data,
   });
 }

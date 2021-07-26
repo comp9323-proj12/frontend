@@ -19,7 +19,7 @@ export async function updateVideo(data) {
   console.log('dataasycn', data);
   return request({
     method: 'PATCH',
-    url: `/videos/${data.author}`,
+    url: `/videos/${data._id}`,
     data,
   });
 }

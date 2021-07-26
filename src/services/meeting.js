@@ -20,7 +20,7 @@ export async function updateMeeting(data) {
   console.log('dataasycn', data);
   return request({
     method: 'PATCH',
-    url: `/meetings/${data.instructor}`,
+    url: `/meetings/${data._id}`,
     data,
   });
 }
