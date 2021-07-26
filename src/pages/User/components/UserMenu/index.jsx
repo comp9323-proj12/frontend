@@ -12,16 +12,13 @@ import {
   Button,
 } from 'antd';
 import moment from 'moment';
+import { getSessionStorage } from '@/utils/storageHelper';
+import UploadMaterialModal from '@/pages/components/UploadMaterialModal';
 
-const UserMenu = ({ currentUser, dispatch }) => {
-  const [isTextModalVisible, setIsTextModalVisible] = useState(false);
-  const [isVideoModalVisible, setIsVideoModalVisible] = useState(false);
-  const [isMeetingModalVisible, setIsMeetingModalVisible] = useState(false);
-  const handleCancel = () => {
-    setIsTextModalVisible(false);
-    setIsVideoModalVisible(false);
-    setIsMeetingModalVisible(false);
-  };
+const UserMenu = ({ dispatch }) => {
+  const [currentModal, setCurrentModal] = useState('');
+  const currentUser = getSessionStorage('currentUser');
+  const [visible, setVisible] = useState(false);
   const logout = (_) => {
     dispatch({
       type: 'login/logout',
@@ -30,17 +27,22 @@ const UserMenu = ({ currentUser, dispatch }) => {
   const handleClick = (operation) => {
     const operationMap = {
       profile: routeProfile,
-      text: setIsTextModalVisible,
-      video: setIsVideoModalVisible,
-      meeting: setIsMeetingModalVisible,
+      article: setCurrentModal,
+      video: setCurrentModal,
+      meeting: setCurrentModal,
       logout: logout,
     };
-    operationMap[operation](true);
+    console.log('operation', operation);
+    operationMap[operation](operation);
+    setVisible(false);
   };
   const routeProfile = (_) => {
     dispatch({
       type: 'page/routeComponent',
-      payload: 'profile',
+      payload: {
+        currentPage: 'researcher',
+        activateContent: currentUser,
+      },
     });
   };
   const layout = {
@@ -51,14 +53,14 @@ const UserMenu = ({ currentUser, dispatch }) => {
       span: 16,
     },
   };
-  //   TODO: post data to backend
-  const onFinish = () => {
-    return '';
+  const closeCurrentModal = () => {
+    setCurrentModal('');
   };
   const menu = (
     <>
       <Menu>
         <Menu.Item
+          key="profile"
           onClick={() => {
             handleClick('profile');
           }}
@@ -66,13 +68,15 @@ const UserMenu = ({ currentUser, dispatch }) => {
           My Profile
         </Menu.Item>
         <Menu.Item
+          key="article"
           onClick={() => {
-            handleClick('text');
+            handleClick('article');
           }}
         >
           Upload Text Story
         </Menu.Item>
         <Menu.Item
+          key="video"
           onClick={() => {
             handleClick('video');
           }}
@@ -80,6 +84,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
           Upload Video Story
         </Menu.Item>
         <Menu.Item
+          key="meeting"
           onClick={() => {
             handleClick('meeting');
           }}
@@ -88,6 +93,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
         </Menu.Item>
         <Menu.Item
           danger
+          key="logout"
           onClick={() => {
             handleClick('logout');
           }}
@@ -95,13 +101,17 @@ const UserMenu = ({ currentUser, dispatch }) => {
           Logout
         </Menu.Item>
       </Menu>
-      <Modal
+      <UploadMaterialModal
+        currentModal={currentModal}
+        closeCurrentModal={closeCurrentModal}
+      />
+      {/* <Modal
         title="Upload Text Story"
         visible={isTextModalVisible}
         footer={null}
         onCancel={handleCancel}
       >
-        <Form {...layout} name="text" onFinish={onFinish}>
+        <Form {...layout} name="article" onFinish={onFinishText}>
           <Form.Item
             name="title"
             label="Title"
@@ -114,9 +124,11 @@ const UserMenu = ({ currentUser, dispatch }) => {
           >
             <Input />
           </Form.Item>
-          {/* TODO: tag */}
-          <Form.Item name="content" label="Content">
+          <Form.Item name="text" label="Content">
             <Input.TextArea />
+          </Form.Item>
+          <Form.Item name="tags" label="Tags">
+
           </Form.Item>
           <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
             <Button type="primary" htmlType="submit">
@@ -183,7 +195,7 @@ const UserMenu = ({ currentUser, dispatch }) => {
             <DatePicker />
           </Form.Item>
           <Form.Item label="Host">
-            <Input defaultValue={currentUser.userName} />
+            <Input defaultValue={currentUser.name} />
           </Form.Item>
           <Form.Item label="Time">
             <TimePicker defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
@@ -194,11 +206,19 @@ const UserMenu = ({ currentUser, dispatch }) => {
             </Button>
           </Form.Item>
         </Form>
-      </Modal>
+      </Modal> */}
     </>
   );
+  const handleVisibleChange = (flag) => {
+    setVisible(flag);
+  };
   return (
-    <Dropdown overlay={menu}>
+    <Dropdown
+      overlay={menu}
+      trigger={['click']}
+      onVisibleChange={handleVisibleChange}
+      visible={visible}
+    >
       <Avatar />
     </Dropdown>
   );

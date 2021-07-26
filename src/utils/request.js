@@ -39,7 +39,7 @@ const codeMessage = {
 };
 
 export const baseURL = 'http://localhost:4000/';
-const withCredentials = true;
+const withCredentials = false;
 const timeout = 30000;
 
 const axiosInstance = axios.create({
