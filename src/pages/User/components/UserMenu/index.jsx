@@ -46,6 +46,7 @@ const UserMenu = ({ dispatch }) => {
       },
     });
   };
+  console.log('currentUser?.name[0]', currentUser?.name[0]);
   const layout = {
     labelCol: {
       span: 8,
@@ -119,8 +120,8 @@ const UserMenu = ({ dispatch }) => {
       visible={visible}
     >
       <span className={'user-menu__drop-down-button'}>
-        <Avatar />
-        {currentUser.name}
+        <Avatar>{currentUser?.name[0]}</Avatar>
+        {currentUser?.name}
       </span>
     </Dropdown>
   );
