@@ -13,6 +13,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { getSessionStorage } from '@/utils/storageHelper';
+import styles from './index.less';
 import UploadMaterialModal from '@/pages/components/UploadMaterialModal';
 
 const UserMenu = ({ dispatch }) => {
@@ -219,7 +220,10 @@ const UserMenu = ({ dispatch }) => {
       onVisibleChange={handleVisibleChange}
       visible={visible}
     >
-      <Avatar />
+      <span className={'user-menu__drop-down-button'}>
+        <Avatar />
+        {currentUser.name}
+      </span>
     </Dropdown>
   );
 };
