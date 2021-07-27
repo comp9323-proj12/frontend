@@ -1,12 +1,34 @@
 .personal-details {
+  margin-bottom: 40px;
   &__info {
     &--main {
       padding-left: 24px;
+      h4 {
+        display: inline-block;
+        font-size: 18px;
+      }
       span {
-        margin-right: 8px;
+        display: block;
+        padding-left: 40px;
+      }
+      :global {
+        .ant-avatar {
+          margin-right: 8px;
+          display: inline-block;
+          padding: 0;
+        }
       }
     }
     &--sub {
+      :global {
+        .ant-tag {
+          font-size: 12px;
+          border-radius: 4px;
+          background-color: #cce5ff;
+          border-color: #b3d7ff;
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 }

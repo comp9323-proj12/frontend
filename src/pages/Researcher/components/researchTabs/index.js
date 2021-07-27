@@ -26,11 +26,14 @@ const ResearchTabs = ({
   userMeetings,
   currentPage,
   isProfile,
+  questions,
 }) => {
   console.log(isProfile);
+  const currentUser = getSessionStorage('currentUser');
   const [editForm] = Form.useForm();
   const [replyForm] = Form.useForm();
   const [listData, setListData] = useState([]);
+  const [questionListData, setQuestionListData] = useState([]);
   const [dateString, setDateString] = useState('');
   const [timeString, setTimeString] = useState('');
   const [visible, setVisible] = useState(false);
@@ -40,13 +43,15 @@ const ResearchTabs = ({
   const [modalItem, setModalItem] = useState({});
   const [profileItem, setProfileItem] = useState({});
   const [currentModal, setCurrentModal] = useState('');
+  const [isReplyVisibleId, setIsReplyVisibleId] = useState('');
   const handleCancel = () => {
     setVisible(false);
     setDeleteModalVisible(false);
     setEditModalVisible(false);
     setQuestionModalVisible(false);
     editForm.setFieldsValue({});
-    replyForm.setFieldsValue({});
+    replyForm.resetFields();
+    setIsReplyVisibleId('');
   };
   const layout = {
     labelCol: {
@@ -60,7 +65,18 @@ const ResearchTabs = ({
     handleEdit(values);
     setEditModalVisible(false);
   };
-  const onReplyFinish = (values) => {};
+  const onReplyFinish = (values, question) => {
+    dispatch({
+      type: 'question/createReply',
+      payload: {
+        whoPost: currentUser._id,
+        question,
+        text: values.reply,
+      },
+    });
+    setIsReplyVisibleId('');
+    replyForm.resetFields();
+  };
   const handleEdit = (values) => {
     const editMap = {
       article: async () => {
@@ -190,9 +206,27 @@ const ResearchTabs = ({
   useEffect(() => {
     setListData(userMeetings);
   }, [userMeetings]);
+  useEffect(() => {
+    setQuestionListData(questions);
+  }, [questions]);
   const renderItemModal = (item) => {
     setModalItem(item);
     setVisible(true);
+  };
+  const openQuestionModal = async (e, item) => {
+    e.stopPropagation();
+    item.text
+      ? await dispatch({
+          type: 'question/fetchQuestionsByArticleId',
+          payload: item._id,
+        })
+      : !isEmpty(item.instructor)
+      ? await dispatch({
+          type: 'question/fetchQuestionsByVideoId',
+          payload: item._id,
+        })
+      : '';
+    setQuestionModalVisible(true);
   };
   console.log('content', content);
   console.log('listData', listData);
@@ -216,8 +250,7 @@ const ResearchTabs = ({
                   <Button
                     className={styles['research-tabs__profile-button']}
                     onClick={(e) => {
-                      e.stopPropagation();
-                      setQuestionModalVisible(true);
+                      openQuestionModal(e, item);
                     }}
                   >
                     Check Question
@@ -279,7 +312,14 @@ const ResearchTabs = ({
                 }
               />
             )}
-            {item.description && (
+            {!item.text && isEmpty(item.instructor) && (
+              <List.Item.Meta
+                className={styles['research-tabs__meta']}
+                title={item.title}
+                description={item.link}
+              />
+            )}
+            {item.text && item.description && (
               <List.Item.Meta
                 title={item.title}
                 description={
@@ -294,7 +334,7 @@ const ResearchTabs = ({
                 <Tag
                   key={index}
                   className={styles['research-tabs__tags']}
-                  color="blue"
+                  color="#b3d7ff"
                 >
                   {tag}
                 </Tag>
@@ -315,47 +355,64 @@ const ResearchTabs = ({
         destroyOnClose={true}
         footer={null}
         onCancel={handleCancel}
+        className={styles['research-tabs__question-modal']}
       >
         <List
-          itemLayout="vertical"
+          //   itemLayout="vertical"
           pagination={{
             pageSize: 8,
           }}
-          dataSource={listData.map((data) => {
-            return data.question;
-          })}
+          dataSource={questionListData}
           renderItem={(question) => {
             console.log('question', question);
             return (
               <List.Item>
-                <List.Item.Meta title={item.title} />
-                {/* {question.replies.map((reply) => {
-									return(
-										<List>
-											<List.Item>
-												{reply.text}
-											</List.Item>
-										</List>
-									)
-								})} */}
-                <Form form={replyForm} onFinish={onReplyFinish}>
-                  <Form.Item
-                    name="reply"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Cannot post empty reply!',
-                      },
-                    ]}
+                <List.Item.Meta
+                  title={question.text}
+                  description={
+                    <>
+                      <span>
+                        {moment(question.createTime).format('DD/MM/YYYY')}
+                      </span>
+                      <span>{question.whoPost.name}</span>
+                    </>
+                  }
+                />
+                {!isReplyVisibleId && (
+                  <Button
+                    onClick={() => {
+                      setIsReplyVisibleId(question._id);
+                    }}
                   >
-                    <Input.TextArea placeholder="Reply" />
-                  </Form.Item>
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Form>
+                    {' '}
+                    Reply{' '}
+                  </Button>
+                )}
+                {isReplyVisibleId === question._id && (
+                  <Form
+                    form={replyForm}
+                    onFinish={(values) => {
+                      onReplyFinish(values, question._id);
+                    }}
+                  >
+                    <Form.Item
+                      name="reply"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Cannot post empty reply!',
+                        },
+                      ]}
+                    >
+                      <Input.TextArea placeholder="Reply" />
+                    </Form.Item>
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Submit
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                )}
               </List.Item>
             );
           }}
@@ -407,9 +464,6 @@ const ResearchTabs = ({
           {currentModal === 'meeting' && (
             <>
               {/* TODO:Notice是不是description */}
-              {/* <Form.Item name="notice" label="Notice">
-              <Input.TextArea />
-            </Form.Item> */}
               <Form.Item name="startDate" label="Start Date">
                 <DatePicker onChange={onDateChange} />
               </Form.Item>
@@ -478,8 +532,10 @@ export default connect(
     article: { userArticles },
     video: { userVideos },
     meeting: { userMeetings },
+    question: { questions },
   }) => ({
     currentUser,
+    questions,
     currentPage,
     userArticles,
     userMeetings,

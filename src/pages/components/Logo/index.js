@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
-// import styles from './index.less';
-import { Button } from 'antd';
+import styles from './index.less';
+import { Avatar } from 'antd';
 const Logo = ({ dispatch }) => {
   const returnHome = () => {
     dispatch({
@@ -12,7 +12,15 @@ const Logo = ({ dispatch }) => {
       },
     });
   };
-  return <Button onClick={returnHome}>Logo</Button>;
+  return (
+    <Avatar
+      onClick={returnHome}
+      className={styles.logo}
+      size={64}
+      alt="LOGO"
+      src={require('@/images/logo_transparent.png')}
+    />
+  );
 };
 
 export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
