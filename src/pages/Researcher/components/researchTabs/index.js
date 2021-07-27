@@ -32,6 +32,8 @@ const ResearchTabs = ({
   const currentUser = getSessionStorage('currentUser');
   const [editForm] = Form.useForm();
   const [replyForm] = Form.useForm();
+  const [enrollModalVisible, setEnrollModalVisible] = useState(false);
+  const [enrollMeeting, setEnrollMeeting] = useState({});
   const [listData, setListData] = useState([]);
   const [questionListData, setQuestionListData] = useState([]);
   const [dateString, setDateString] = useState('');
@@ -179,7 +181,7 @@ const ResearchTabs = ({
     },
     meeting: async () => {
       await dispatch({
-        type: 'meeting/fetchMeetingByUserId',
+        type: 'meeting/fetchMeetingsByUserId',
         payload: user._id,
       });
       // setListData(userMeetings);
@@ -213,6 +215,33 @@ const ResearchTabs = ({
     setModalItem(item);
     setVisible(true);
   };
+  const handleEnrollMeeting = () => {
+    console.log('1', enrollMeeting);
+    let students = enrollMeeting.students;
+    students.push(currentUser._id);
+    console.log('enrollMeeting', {
+      ...enrollMeeting,
+      students,
+    });
+    dispatch({
+      type: 'meeting/updateMeeting',
+      payload: {
+        ...enrollMeeting,
+        students,
+      },
+    });
+    setEnrollModalVisible(false);
+  };
+  const renderDescription = (item) => {
+    return item.instructor ? (
+      <p>{item.link}</p>
+    ) : (
+      <>
+        <img src={require('@/images/video-thumbnail.jpeg')} />
+        <p>{item.link}</p>
+      </>
+    );
+  };
   const openQuestionModal = async (e, item) => {
     e.stopPropagation();
     item.text
@@ -227,6 +256,11 @@ const ResearchTabs = ({
         })
       : '';
     setQuestionModalVisible(true);
+  };
+  const openEnrollModal = async (e, meeting) => {
+    e.stopPropagation();
+    setEnrollModalVisible(true);
+    setEnrollMeeting(meeting);
   };
   console.log('content', content);
   console.log('listData', listData);
@@ -245,47 +279,69 @@ const ResearchTabs = ({
               renderItemModal(item);
             }}
             extra={
-              isProfile && (
-                <>
-                  <Button
-                    className={styles['research-tabs__profile-button']}
-                    onClick={(e) => {
-                      openQuestionModal(e, item);
-                    }}
-                  >
-                    Check Question
-                  </Button>
-                  <Button
-                    className={styles['research-tabs__profile-button']}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrentModal(
-                        item.instructor
-                          ? 'meeting'
-                          : item.link
-                          ? 'video'
-                          : 'article',
-                      );
-                      editForm.setFieldsValue(item);
-                      setProfileItem(item);
-                      setEditModalVisible(true);
-                    }}
-                  >
-                    edit
-                  </Button>
-                  <Button
-                    className={styles['research-tabs__profile-button']}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setProfileItem(item);
-                      setDeleteModalVisible(true);
-                      // handleDelete(item);
-                    }}
-                  >
-                    delete
-                  </Button>
-                </>
-              )
+              <>
+                {!isProfile &&
+                  content === 'meeting' &&
+                  !item.students?.includes(currentUser._id) && (
+                    <>
+                      <Button
+                        className={styles['research-tabs__profile-button']}
+                        onClick={(e) => {
+                          openEnrollModal(e, item);
+                        }}
+                      >
+                        Enroll meeting
+                      </Button>
+                    </>
+                  )}
+                {isProfile && (
+                  <>
+                    {content !== 'meeting' && (
+                      <Button
+                        className={styles['research-tabs__profile-button']}
+                        onClick={(e) => {
+                          openQuestionModal(e, item);
+                        }}
+                      >
+                        Check Question
+                      </Button>
+                    )}
+                    <Button
+                      className={styles['research-tabs__profile-button']}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentModal(
+                          item.instructor
+                            ? 'meeting'
+                            : item.link
+                            ? 'video'
+                            : 'article',
+                        );
+                        editForm.setFieldsValue({
+                          ...item,
+                          startDate: '',
+                          startTime: '',
+                        });
+                        setProfileItem(item);
+                        setEditModalVisible(true);
+                      }}
+                    >
+                      edit
+                    </Button>
+                    <Button
+                      className={styles['research-tabs__profile-button']}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setProfileItem(item);
+                        setDeleteModalVisible(true);
+                        // handleDelete(item);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  </>
+                )}
+              </>
             }
           >
             <Tag className={styles['research-tabs__time']}>
@@ -297,10 +353,9 @@ const ResearchTabs = ({
                   moment(item.startTime).format('DD/MM/YYYY HH:mm:ss')}
               </Tag>
             )}
-            {!isEmpty(item.students) &&
-              item.students.map((student) => {
-                return <Tag>{student}</Tag>;
-              })}
+            {content === 'meeting' && (
+              <span> Enroll number: {item.students?.length} </span>
+            )}
             {item.text && (
               <List.Item.Meta
                 className={styles['research-tabs__meta']}
@@ -312,21 +367,11 @@ const ResearchTabs = ({
                 }
               />
             )}
-            {!item.text && isEmpty(item.instructor) && (
+            {!item.text && (
               <List.Item.Meta
                 className={styles['research-tabs__meta']}
                 title={item.title}
-                description={item.link}
-              />
-            )}
-            {item.text && item.description && (
-              <List.Item.Meta
-                title={item.title}
-                description={
-                  item?.description?.length > 50
-                    ? item.text.slice(0, 50) + '...'
-                    : item.text
-                }
+                description={renderDescription(item)}
               />
             )}
             {item?.tags?.map((tag, index) => {
@@ -349,6 +394,16 @@ const ResearchTabs = ({
         user={user}
         handleCancel={handleCancel}
       />
+      <Modal
+        title="Enroll"
+        visible={enrollModalVisible}
+        destroyOnClose={true}
+        onOk={handleEnrollMeeting}
+        onCancel={handleCancel}
+        className={styles['research-tabs__question-modal']}
+      >
+        <p>Are you sure to enroll {enrollMeeting.title} ?</p>
+      </Modal>
       <Modal
         title="Question"
         visible={questionModalVisible}
@@ -463,11 +518,28 @@ const ResearchTabs = ({
           )}
           {currentModal === 'meeting' && (
             <>
-              {/* TODO:Notice是不是description */}
-              <Form.Item name="startDate" label="Start Date">
+              <Form.Item
+                name="startDate"
+                label="Start Date"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please pick start date!',
+                  },
+                ]}
+              >
                 <DatePicker onChange={onDateChange} />
               </Form.Item>
-              <Form.Item name="startTime" label="Start Time">
+              <Form.Item
+                name="startTime"
+                label="Start Time"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please pick start time!',
+                  },
+                ]}
+              >
                 <TimePicker onChange={onTimeChange} />
               </Form.Item>
             </>

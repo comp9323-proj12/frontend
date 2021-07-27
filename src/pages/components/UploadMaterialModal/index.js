@@ -78,6 +78,12 @@ const UploadMaterialModal = ({
     });
   };
   const createMeeting = (values) => {
+    console.log(
+      'time',
+      moment(dateString + ' ' + timeString, 'YYYY-MM-DD HH:mm:ss').format(
+        'MM/DD/YYYY HH:mm:ss',
+      ),
+    );
     dispatch({
       type: 'meeting/createMeeting',
       payload: {
@@ -86,7 +92,7 @@ const UploadMaterialModal = ({
         startTime: moment(
           dateString + ' ' + timeString,
           'YYYY-MM-DD HH:mm:ss',
-        ).format('DD/MM/YYYY HH:mm:ss'),
+        ).format('MM/DD/YYYY HH:mm:ss'),
       },
     });
   };
@@ -185,10 +191,28 @@ const UploadMaterialModal = ({
             {/* <Form.Item name="notice" label="Notice">
               <Input.TextArea />
             </Form.Item> */}
-            <Form.Item name="startDate" label="Start Date">
+            <Form.Item
+              name="startDate"
+              label="Start Date"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please pick start date!',
+                },
+              ]}
+            >
               <DatePicker onChange={onDateChange} />
             </Form.Item>
-            <Form.Item name="startTime" label="Start Time">
+            <Form.Item
+              name="startTime"
+              label="Start Time"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please pick start time!',
+                },
+              ]}
+            >
               <TimePicker onChange={onTimeChange} />
             </Form.Item>
           </>

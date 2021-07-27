@@ -95,64 +95,79 @@ const ResearcherItem = ({
           {content.text}
         </p>
       )}
-      <Row className={styles['researcher-item__comment']}>
-        <List
-          itemLayout="vertical"
-          pagination={{
-            pageSize: 4,
-          }}
-          dataSource={questions}
-          renderItem={(que) => {
-            console.log('que._id', que);
-            console.log('extendInputIndex', extendInputIndex);
-            return (
-              <List.Item
-                key={que._id}
-                className={styles['researcher-item__questions']}
-              >
-                <Row>
-                  <p>{que.text}</p>
-                  <span>{que.whoPost.name}</span>
-                  <span>{moment(que.createTime).format('DD/MM/YYYY')}</span>
-                </Row>
-                {que.replies.map((reply) => {
-                  console.log('reply', reply);
-                  return (
-                    <Row className={styles['researcher-item__replies']}>
-                      <p>{reply.text}</p>
-                      <span>{reply.whoPost.name}</span>
-                      <span>
-                        {moment(reply.createTime).format('DD/MM/YYYY')}
-                      </span>
-                    </Row>
-                  );
-                })}
-                <Button
-                  onClick={() => {
-                    setExtendInputIndex(que._id);
-                  }}
+      {content.description && (
+        <p className={styles['researcher-item__main--description']}>
+          {content.description}
+        </p>
+      )}
+      {content.link && isEmpty(content.instructor) && (
+        <img src={require('@/images/video-thumbnail.jpeg')} />
+      )}
+      {content.link && (
+        <p className={styles['researcher-item__main--description']}>
+          Link: {content.link}
+        </p>
+      )}
+      {isEmpty(content.instructor) && (
+        <Row className={styles['researcher-item__comment']}>
+          <List
+            itemLayout="vertical"
+            pagination={{
+              pageSize: 4,
+            }}
+            dataSource={questions}
+            renderItem={(que) => {
+              console.log('que._id', que);
+              console.log('extendInputIndex', extendInputIndex);
+              return (
+                <List.Item
+                  key={que._id}
+                  className={styles['researcher-item__questions']}
                 >
-                  Reply
-                </Button>
-                {extendInputIndex === que._id && (
-                  <Input.TextArea
-                    onPressEnter={(e) => {
-                      handleReplySubmit(e.target.value);
+                  <Row>
+                    <p>{que.text}</p>
+                    <span>{que.whoPost.name}</span>
+                    <span>{moment(que.createTime).format('DD/MM/YYYY')}</span>
+                  </Row>
+                  {que.replies.map((reply) => {
+                    console.log('reply', reply);
+                    return (
+                      <Row className={styles['researcher-item__replies']}>
+                        <p>{reply.text}</p>
+                        <span>{reply.whoPost.name}</span>
+                        <span>
+                          {moment(reply.createTime).format('DD/MM/YYYY')}
+                        </span>
+                      </Row>
+                    );
+                  })}
+                  <Button
+                    onClick={() => {
+                      setExtendInputIndex(que._id);
                     }}
-                  />
-                )}
-              </List.Item>
-            );
-          }}
-        ></List>
-        <Input
-          placeholder={'Ask Question'}
-          onPressEnter={(e) => {
-            handleQuestionSubmit(e.target.value);
-            e.value = '';
-          }}
-        />
-      </Row>
+                  >
+                    Reply
+                  </Button>
+                  {extendInputIndex === que._id && (
+                    <Input.TextArea
+                      onPressEnter={(e) => {
+                        handleReplySubmit(e.target.value);
+                      }}
+                    />
+                  )}
+                </List.Item>
+              );
+            }}
+          ></List>
+          <Input
+            placeholder={'Ask Question'}
+            onPressEnter={(e) => {
+              handleQuestionSubmit(e.target.value);
+              e.value = '';
+            }}
+          />
+        </Row>
+      )}
     </Modal>
   );
 };

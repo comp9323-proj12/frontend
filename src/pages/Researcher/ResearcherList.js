@@ -49,7 +49,7 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
         >
           <List.Item.Meta
             // 头像
-            avatar={<Avatar src={item.avatar} />}
+            avatar={<Avatar> {item.name[0]}</Avatar>}
             // 个人主页
             title={item.name}
             // 工作领域

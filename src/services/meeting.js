@@ -28,6 +28,6 @@ export async function updateMeeting(data) {
 export async function deleteMeeting(data) {
   return request({
     method: 'DELETE',
-    url: `/meetings/delete/${data}`,
+    url: `/meetings/${data}`,
   });
 }

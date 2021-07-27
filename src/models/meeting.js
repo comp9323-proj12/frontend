@@ -35,6 +35,11 @@ const Meeting = {
         payload: response.status,
       });
     },
+    //   yield put({
+    //     type: 'putCreateMeetingStatus',
+    //     payload: response.status,
+    //   });
+    // },
   },
 
   reducers: {

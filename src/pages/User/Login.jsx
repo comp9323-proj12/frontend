@@ -81,9 +81,9 @@ const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
   return (
     <Row>
       <Col className={styles['login__banner']} span={8}>
-        <Carousel autoplay autoplaySpeed={4000}>
-          <img src="/icons/login-banner_1.png" alt="banner-1" />
-          <img src="/icons/login-banner_2.png" alt="banner-2" />
+        <Carousel autoplay autoplaySpeed={3000}>
+          <img src={require('@/images/login-banner_1.png')} alt="banner-1" />
+          <img src={require('@/images/login-banner_2.png')} alt="banner-2" />
         </Carousel>
       </Col>
       <Col className={styles['login__main']} span={16}>
