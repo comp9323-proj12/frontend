@@ -312,7 +312,14 @@ const ResearchTabs = ({
                 }
               />
             )}
-            {item.description && (
+            {!item.text && isEmpty(item.instructor) && (
+              <List.Item.Meta
+                className={styles['research-tabs__meta']}
+                title={item.title}
+                description={item.link}
+              />
+            )}
+            {item.text && item.description && (
               <List.Item.Meta
                 title={item.title}
                 description={
