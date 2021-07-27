@@ -16,6 +16,20 @@ export async function createQuestion(data) {
     data,
   });
 }
+export async function getQuestionsByArticle(data) {
+  console.log('dataasycn', data);
+  return request({
+    method: 'GET',
+    url: `/questions/article/${data}`,
+  });
+}
+export async function getQuestionsByVideo(data) {
+  console.log('dataasycn', data);
+  return request({
+    method: 'GET',
+    url: `/questions/video/${data}`,
+  });
+}
 // export async function updateArticle(data) {
 //   console.log('dataasycn', data);
 //   return request({

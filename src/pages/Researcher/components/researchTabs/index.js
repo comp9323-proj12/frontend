@@ -294,7 +294,7 @@ const ResearchTabs = ({
                 <Tag
                   key={index}
                   className={styles['research-tabs__tags']}
-                  color="blue"
+                  color="#b3d7ff"
                 >
                   {tag}
                 </Tag>
@@ -407,9 +407,6 @@ const ResearchTabs = ({
           {currentModal === 'meeting' && (
             <>
               {/* TODO:Notice是不是description */}
-              {/* <Form.Item name="notice" label="Notice">
-              <Input.TextArea />
-            </Form.Item> */}
               <Form.Item name="startDate" label="Start Date">
                 <DatePicker onChange={onDateChange} />
               </Form.Item>
