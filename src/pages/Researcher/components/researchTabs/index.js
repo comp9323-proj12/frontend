@@ -15,6 +15,7 @@ import { getSessionStorage } from '@/utils/storageHelper';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
+import styles from './index.less';
 import { isEmpty } from 'lodash';
 const ResearchTabs = ({
   dispatch,
@@ -198,30 +199,67 @@ const ResearchTabs = ({
   return (
     <>
       <List
-        itemLayout="vertical"
         pagination={{
           pageSize: 4,
         }}
         dataSource={listData}
         renderItem={(item) => (
           <List.Item
+            className={styles['research-tabs__list-item']}
             key={item._id}
             onClick={() => {
               renderItemModal(item);
             }}
-            extra={item?.tags?.map((tag, index) => {
-              return (
-                <Tag key={index} color="blue">
-                  {tag}
-                </Tag>
-              );
-            })}
+            extra={
+              isProfile && (
+                <>
+                  <Button
+                    className={styles['research-tabs__profile-button']}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setQuestionModalVisible(true);
+                    }}
+                  >
+                    Check Question
+                  </Button>
+                  <Button
+                    className={styles['research-tabs__profile-button']}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentModal(
+                        item.instructor
+                          ? 'meeting'
+                          : item.link
+                          ? 'video'
+                          : 'article',
+                      );
+                      editForm.setFieldsValue(item);
+                      setProfileItem(item);
+                      setEditModalVisible(true);
+                    }}
+                  >
+                    edit
+                  </Button>
+                  <Button
+                    className={styles['research-tabs__profile-button']}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setProfileItem(item);
+                      setDeleteModalVisible(true);
+                      // handleDelete(item);
+                    }}
+                  >
+                    delete
+                  </Button>
+                </>
+              )
+            }
           >
-            <Tag>
+            <Tag className={styles['research-tabs__time']}>
               {'Create time: ' + moment(item.createTime).format('DD/MM/YYYY')}
             </Tag>
             {item.startTime && (
-              <Tag>
+              <Tag className={styles['research-tabs__time']}>
                 {'Start time: ' +
                   moment(item.startTime).format('DD/MM/YYYY HH:mm:ss')}
               </Tag>
@@ -232,6 +270,7 @@ const ResearchTabs = ({
               })}
             {item.text && (
               <List.Item.Meta
+                className={styles['research-tabs__meta']}
                 title={item.title}
                 description={
                   item.text.length > 50
@@ -250,45 +289,17 @@ const ResearchTabs = ({
                 }
               />
             )}
-            {isProfile && (
-              <>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setQuestionModalVisible(true);
-                  }}
+            {item?.tags?.map((tag, index) => {
+              return (
+                <Tag
+                  key={index}
+                  className={styles['research-tabs__tags']}
+                  color="blue"
                 >
-                  Check Question
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrentModal(
-                      item.instructor
-                        ? 'meeting'
-                        : item.link
-                        ? 'video'
-                        : 'article',
-                    );
-                    editForm.setFieldsValue(item);
-                    setProfileItem(item);
-                    setEditModalVisible(true);
-                  }}
-                >
-                  edit
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setProfileItem(item);
-                    setDeleteModalVisible(true);
-                    // handleDelete(item);
-                  }}
-                >
-                  delete
-                </Button>
-              </>
-            )}
+                  {tag}
+                </Tag>
+              );
+            })}
           </List.Item>
         )}
       ></List>

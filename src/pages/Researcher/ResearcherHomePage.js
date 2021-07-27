@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 import { Tabs, Empty } from 'antd';
-// import styles from './index.less';
+import styles from './ResearcherHomePage.less';
 import { isEmpty } from 'lodash';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { PersonalDetails } from '@/pages/User/components/PersonalDetails';
@@ -32,7 +32,11 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
       {!isEmpty(activateUser) && (
         <>
           <PersonalDetails user={activateUser} />
-          <Tabs defaultActiveKey="article" onChange={handleTabChange}>
+          <Tabs
+            defaultActiveKey="article"
+            onChange={handleTabChange}
+            className={styles['researcher-home-page__tabs']}
+          >
             <TabPane tab="Text Story" key="article">
               <ResearchTabs
                 user={activateUser}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect, Link, Dispatch } from 'umi';
 import { Button, List, Avatar } from 'antd';
 import ResearcherHomePage from './ResearcherHomePage';
+import styles from './ResearcherList.less';
 
 const ResearcherList = ({ dispatch, researchers, currentPage }) => {
   // const [user, setUser] = useState(null);
@@ -22,7 +23,6 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
     });
     // setUser(item)
   };
-  console.log('researchersresearchers', researchers);
   return (
     <List
       size="large"
@@ -41,6 +41,7 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
       dataSource={researchers}
       renderItem={(item) => (
         <List.Item
+          className={styles['researcher-list__item']}
           key={item.title}
           onClick={() => {
             handleClickResearcher(item);
@@ -55,7 +56,9 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
             description={item.researchArea}
           />
           {/* 文章标题和视频标题 */}
-          {item.publications}
+          <span className={styles['researcher-list__publications']}>
+            {item.publications}
+          </span>
         </List.Item>
       )}
     />

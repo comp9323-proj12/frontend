@@ -26,18 +26,20 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
   };
 
   return (
-    <>
-      <Row>
-        <Col span={6}>
+    <div className={styles['container']}>
+      <Row className={styles['navigation']}>
+        <Col span={6} className={styles['navigation__logo']}>
           <Logo />
         </Col>
-        <Col span={12}>{/* <SearchBar /> */}</Col>
-        <Col span={6}>
+        <Col span={12} className={styles['navigation__search-bar']}>
+          {/* <SearchBar /> */}
+        </Col>
+        <Col span={6} className={styles['navigation__user-menu']}>
           <UserMenu />
         </Col>
       </Row>
       {routeMap[currentPageRoute]}
-    </>
+    </div>
   );
 };
 

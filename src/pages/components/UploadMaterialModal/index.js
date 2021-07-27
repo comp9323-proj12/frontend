@@ -15,6 +15,7 @@ import { isEmpty } from 'lodash';
 import { connect, Dispatch } from 'umi';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import styles from './index.less';
 import moment from 'moment';
 // import styles from './index.less';
 const UploadMaterialModal = ({
@@ -147,6 +148,7 @@ const UploadMaterialModal = ({
   }, [reversalArticleStatus]);
   return (
     <Modal
+      className={styles['upload-material-modal']}
       title={titleMap[currentModal]}
       visible={isModalVisible}
       footer={null}
