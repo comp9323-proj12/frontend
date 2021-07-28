@@ -4,7 +4,7 @@ import { Button, Carousel, Row, Col, Avatar } from 'antd';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
 import Logo from '../components/Logo';
-// import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/SearchBar';
 import UserMenu from '../User/components/UserMenu';
 import ResearcherHomePage from '../Researcher/ResearcherHomePage';
 import ResearcherList from '../Researcher/ResearcherList';
@@ -19,6 +19,11 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
   useEffect(() => {
     setCurrentPageRoute(getSessionStorage('currentPage') || 'home');
   }, [currentPage]);
+  useEffect(() => {
+    dispatch({
+      type: 'user/fetchResearchers',
+    });
+  }, []);
   const routeMap = {
     home: <ResearcherList />,
     researcher: <ResearcherHomePage />,
@@ -31,7 +36,7 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
           <Logo />
         </Col>
         <Col span={12} className={styles['navigation__search-bar']}>
-          {/* <SearchBar /> */}
+          <SearchBar />
         </Col>
         <Col span={6} className={styles['navigation__user-menu']}>
           <UserMenu />

@@ -3,6 +3,7 @@ import {
   createVideo,
   deleteVideo,
   updateVideo,
+  searchVideos,
 } from '@/services/video';
 
 const Video = {
@@ -11,6 +12,7 @@ const Video = {
     userVideos: [],
     createVideoStatus: null,
     reversalVideoStatus: false,
+    searchVideosResults: [],
   },
   effects: {
     *fetchVideosByUserId({ payload }, { call, put }) {
@@ -22,6 +24,14 @@ const Video = {
         });
       }
     },
+    *searchVideos({ payload }, { call, put }) {
+      const response = yield call(searchVideos, payload);
+      yield put({
+        type: 'listSearchVideosResults',
+        payload: response.data,
+      });
+    },
+
     *createVideo({ payload }, { call, put }) {
       const response = yield call(createVideo, payload);
       yield put({
@@ -51,6 +61,13 @@ const Video = {
         ...state,
         createVideoStatus: payload,
         reversalVideoStatus: !state.reversalVideoStatus,
+      };
+    },
+    listSearchVideosResults(state, action) {
+      const { payload } = action;
+      return {
+        ...state,
+        searchVideosResults: payload,
       };
     },
   },

@@ -3,6 +3,7 @@ import {
   createArticle,
   deleteArticle,
   updateArticle,
+  searchArticles,
 } from '@/services/article';
 
 const Article = {
@@ -11,6 +12,7 @@ const Article = {
     userArticles: [],
     createArticleStatus: null,
     reversalArticleStatus: false,
+    searchArticlesResults: [],
   },
   effects: {
     *fetchArticlesByUserId({ payload }, { call, put }) {
@@ -35,6 +37,13 @@ const Article = {
     *deleteArticle({ payload }, { call, put }) {
       const response = yield call(deleteArticle, payload);
     },
+    *searchArticles({ payload }, { call, put }) {
+      const response = yield call(searchArticles, payload);
+      yield put({
+        type: 'listSearchArticlesResults',
+        payload: response.data,
+      });
+    },
   },
 
   reducers: {
@@ -43,6 +52,13 @@ const Article = {
       return {
         ...state,
         userArticles: payload,
+      };
+    },
+    listSearchArticlesResults(state, action) {
+      const { payload } = action;
+      return {
+        ...state,
+        searchArticlesResults: payload,
       };
     },
     putCreateArticleStatus(state, action) {

@@ -3,6 +3,7 @@ import {
   createMeeting,
   deleteMeeting,
   updateMeeting,
+  searchMeetings,
 } from '@/services/meeting';
 
 const Meeting = {
@@ -11,6 +12,7 @@ const Meeting = {
     userMeetings: [],
     createMeetingStatus: null,
     reversalMeetingStatus: false,
+    searchMeetingsResults: [],
   },
   effects: {
     *fetchMeetingsByUserId({ payload }, { call, put }) {
@@ -21,6 +23,13 @@ const Meeting = {
           payload: response.data,
         });
       }
+    },
+    *searchMeetings({ payload }, { call, put }) {
+      const response = yield call(searchMeetings, payload);
+      yield put({
+        type: 'listSearchMeetingsResults',
+        payload: response.data,
+      });
     },
     *deleteMeeting({ payload }, { call, put }) {
       yield call(deleteMeeting, payload);
@@ -48,6 +57,13 @@ const Meeting = {
       return {
         ...state,
         userMeetings: payload,
+      };
+    },
+    listSearchMeetingsResults(state, action) {
+      const { payload } = action;
+      return {
+        ...state,
+        searchMeetingsResults: payload,
       };
     },
     putCreateMeetingStatus(state, action) {

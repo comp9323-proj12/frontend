@@ -14,6 +14,14 @@ export async function createArticle(data) {
     data,
   });
 }
+
+export async function searchArticles(data) {
+  return request({
+    method: 'GET',
+    url: `/articles?subCategory=${data.subCategory}&value=${data.value}`,
+  });
+}
+
 export async function updateArticle(data) {
   return request({
     method: 'PATCH',
