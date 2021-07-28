@@ -94,12 +94,9 @@ const SearcherBar = ({
     setEnrollModalVisible(true);
     setEnrollMeeting(meeting);
   };
-  // form.getFieldValue('catrgory')
   const handleMainChange = (value) => {
-    console.log(value);
     form.setFieldsValue({ mainCategory: value });
     setCategory(value);
-    console.log('form.getFieldValue', form.getFieldValue());
   };
   const handleSubChange = (value) => {
     form.setFieldsValue({ subCategory: value });

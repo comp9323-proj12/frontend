@@ -265,7 +265,6 @@ const ResearchTabs = ({
     setEnrollModalVisible(true);
     setEnrollMeeting(meeting);
   };
-  console.log('userArticles', userArticles);
   return (
     <>
       <List
