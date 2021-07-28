@@ -11,6 +11,9 @@ const Logo = ({ dispatch }) => {
         activateContent: {},
       },
     });
+    dispatch({
+      type: 'user/fetchResearchers',
+    });
   };
   return (
     <Avatar
