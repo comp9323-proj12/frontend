@@ -19,7 +19,6 @@ import { getSessionStorage } from '@/utils/storageHelper';
 
 const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
   const currentUser = getSessionStorage('currentUser');
-  console.log('currentUsercurrentUser', currentUser);
   const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false);
   const [form] = Form.useForm();
   const mounted = useRef();

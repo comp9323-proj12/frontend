@@ -12,7 +12,6 @@ const Page = {
   },
   effects: {
     *routeComponent({ payload }, { _, put }) {
-      console.log('routeComponentpayload', payload);
       yield put({
         type: 'routePage',
         payload,

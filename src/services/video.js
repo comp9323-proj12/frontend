@@ -16,7 +16,6 @@ export async function createVideo(data) {
 }
 
 export async function updateVideo(data) {
-  console.log('dataasycn', data);
   return request({
     method: 'PATCH',
     url: `/videos/${data._id}`,

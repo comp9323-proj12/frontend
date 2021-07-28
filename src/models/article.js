@@ -15,7 +15,6 @@ const Article = {
   effects: {
     *fetchArticlesByUserId({ payload }, { call, put }) {
       const response = yield call(getArticlesByUserId, payload);
-      console.log('articles', response);
       if (response.status === 200) {
         yield put({
           type: 'listUserArticles',
@@ -25,7 +24,6 @@ const Article = {
     },
     *createArticle({ payload }, { call, put }) {
       const response = yield call(createArticle, payload);
-      console.log('responseresponseresponse', response);
       yield put({
         type: 'putCreateArticleStatus',
         payload: response.status,
@@ -49,7 +47,6 @@ const Article = {
     },
     putCreateArticleStatus(state, action) {
       const { payload } = action;
-      console.log('createArticleStatus', payload);
       return {
         ...state,
         createArticleStatus: payload,

@@ -19,7 +19,6 @@ const Login = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(loginUser, payload);
-      console.log('response', response);
       if (response.status === 200) {
         yield put({
           type: 'listCurrentUser',
@@ -34,7 +33,6 @@ const Login = {
     },
     *register({ payload }, { call, put }) {
       const response = yield call(registerUser, payload);
-      console.log('responseregister', response);
       if (response.status === 200) {
         yield put({
           type: 'listRegisterFlag',
@@ -47,7 +45,6 @@ const Login = {
   reducers: {
     listCurrentUser(state, action) {
       const { payload } = action;
-      console.log('payload', payload);
       createSessionStorage('currentUser', payload);
       return {
         ...state,

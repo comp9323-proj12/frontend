@@ -72,8 +72,6 @@ const UploadMaterialModal = ({
     closeCurrentModal();
   };
   const createArticle = (values) => {
-    console.log('values', values);
-    console.log('user._id', user._id);
     const formatTags = isEmpty(values.tags) ? [] : values.tags;
     dispatch({
       type: 'article/createArticle',
@@ -94,12 +92,6 @@ const UploadMaterialModal = ({
     });
   };
   const createMeeting = (values) => {
-    console.log(
-      'time',
-      moment(dateString + ' ' + timeString, 'YYYY-MM-DD HH:mm:ss').format(
-        'MM/DD/YYYY HH:mm:ss',
-      ),
-    );
     dispatch({
       type: 'meeting/createMeeting',
       payload: {
@@ -118,19 +110,15 @@ const UploadMaterialModal = ({
       video: () => createVideo(values),
       meeting: () => createMeeting(values),
     };
-    console.log('currentModal', currentModal);
-    console.log('finishMap[currentModal]', finishMap[currentModal]);
     finishMap[currentModal]();
     handleCancel();
   };
   useEffect(() => {
-    console.log('key', currentModal);
     if (!isEmpty(currentModal)) {
       setIsModalVisible(true);
     }
   }, [currentModal]);
   const notifyInfos = (status) => {
-    console.log('status', status);
     if (status !== 200) {
       notification.error({
         message: 'Server Error',

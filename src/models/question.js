@@ -20,7 +20,6 @@ const Question = {
     },
     *createQuestion({ payload }, { call, put }) {
       const response = yield call(createQuestion, payload);
-      console.log('quesResponse', response);
       yield put({
         type: 'listQuestions',
         payload: response.data,
@@ -28,7 +27,6 @@ const Question = {
     },
     *fetchQuestionsByArticleId({ payload }, { call, put }) {
       const response = yield call(getQuestionsByArticle, payload);
-      console.log('ques1Response', response);
       yield put({
         type: 'listQuestions',
         payload: response.data,
@@ -36,7 +34,6 @@ const Question = {
     },
     *fetchQuestionsByVideoId({ payload }, { call, put }) {
       const response = yield call(getQuestionsByVideo, payload);
-      console.log('ques1Response', response);
       yield put({
         type: 'listQuestions',
         payload: response.data,

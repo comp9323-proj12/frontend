@@ -6,7 +6,6 @@ import styles from './ResearcherList.less';
 
 const ResearcherList = ({ dispatch, researchers, currentPage }) => {
   const [researcherList, setResearcherList] = useState([]);
-  console.log('currentPagecurrentPage', currentPage);
   useEffect(() => {
     dispatch({
       type: 'user/fetchResearchers',
@@ -16,7 +15,6 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
     setResearcherList(researchers);
   }, [researchers]);
   const handleClickResearcher = (item) => {
-    console.log('item', item);
     dispatch({
       type: 'page/routeComponent',
       payload: {
