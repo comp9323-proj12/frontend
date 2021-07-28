@@ -63,6 +63,14 @@ const ResearchTabs = ({
       span: 16,
     },
   };
+  const articleLayout = {
+    labelCol: {
+      span: 4,
+    },
+    wrapperCol: {
+      span: 18,
+    },
+  };
   const onEditFinish = (values) => {
     handleEdit(values);
     setEditModalVisible(false);
@@ -488,11 +496,18 @@ const ResearchTabs = ({
         visible={editModalVisible}
         destroyOnClose={true}
         footer={null}
+        width={content === 'article' ? 1200 : 520}
         onCancel={handleCancel}
       >
         {console.log('profileItemprofileItem', profileItem)}
         <Form
-          {...layout}
+          labelCol={
+            content === 'article' ? articleLayout.labelCol : layout.labelCol
+          }
+          wrapperCol={
+            content === 'article' ? articleLayout.wrapperCol : layout.wrapperCol
+          }
+          // {...layout}
           //   initialValues={}
           name={currentModal}
           onFinish={onEditFinish}
@@ -586,7 +601,7 @@ const ResearchTabs = ({
             </Form.List>
           </Form.Item>
 
-          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+          <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
