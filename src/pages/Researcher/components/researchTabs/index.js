@@ -28,7 +28,6 @@ const ResearchTabs = ({
   isProfile,
   questions,
 }) => {
-  console.log(isProfile);
   const currentUser = getSessionStorage('currentUser');
   const [editForm] = Form.useForm();
   const [replyForm] = Form.useForm();
@@ -90,7 +89,6 @@ const ResearchTabs = ({
   const handleEdit = (values) => {
     const editMap = {
       article: async () => {
-        console.log('edititem', profileItem);
         await dispatch({
           type: 'article/updateArticle',
           payload: { ...profileItem, ...values },
@@ -101,7 +99,6 @@ const ResearchTabs = ({
         });
       },
       video: async () => {
-        console.log('edititem', profileItem);
         await dispatch({
           type: 'video/updateVideo',
           payload: { ...profileItem, ...values },
@@ -112,7 +109,6 @@ const ResearchTabs = ({
         });
       },
       meeting: async () => {
-        console.log('edititem', profileItem);
         await dispatch({
           type: 'meeting/updateMeeting',
           payload: { ...profileItem, ...values },
@@ -134,7 +130,6 @@ const ResearchTabs = ({
   const handleDelete = (item) => {
     const deleteMap = {
       article: async () => {
-        console.log('deleteitem', item);
         await dispatch({
           type: 'article/deleteArticle',
           payload: item._id,
@@ -145,7 +140,6 @@ const ResearchTabs = ({
         });
       },
       video: async () => {
-        console.log('deleteitem', item);
         await dispatch({
           type: 'video/deleteVideo',
           payload: item._id,
@@ -156,7 +150,6 @@ const ResearchTabs = ({
         });
       },
       meeting: async () => {
-        console.log('deleteitem', item);
         await dispatch({
           type: 'meeting/deleteMeeting',
           payload: item._id,
@@ -172,31 +165,25 @@ const ResearchTabs = ({
   };
   const contentMap = {
     article: async () => {
-      console.log('user._iduser._id', user);
       await dispatch({
         type: 'article/fetchArticlesByUserId',
         payload: user._id,
       });
-      console.log('userArticlesuserArticles', userArticles);
-      // setListData(userArticles);
     },
     video: async () => {
       await dispatch({
         type: 'video/fetchVideosByUserId',
         payload: user._id,
       });
-      // setListData(userVideos);
     },
     meeting: async () => {
       await dispatch({
         type: 'meeting/fetchMeetingsByUserId',
         payload: user._id,
       });
-      // setListData(userMeetings);
     },
   };
   useEffect(() => {
-    console.log('1123');
     contentMap[content]();
   }, [user]);
   useEffect(() => {
@@ -222,15 +209,23 @@ const ResearchTabs = ({
   const renderItemModal = (item) => {
     setModalItem(item);
     setVisible(true);
+    if (!isEmpty(item)) {
+      if (item.text) {
+        dispatch({
+          type: 'question/fetchQuestionsByArticleId',
+          payload: item._id,
+        });
+      } else if (isEmpty(item.instructor)) {
+        dispatch({
+          type: 'question/fetchQuestionsByVideoId',
+          payload: item._id,
+        });
+      }
+    }
   };
   const handleEnrollMeeting = () => {
-    console.log('1', enrollMeeting);
     let students = enrollMeeting.students;
     students.push(currentUser._id);
-    console.log('enrollMeeting', {
-      ...enrollMeeting,
-      students,
-    });
     dispatch({
       type: 'meeting/updateMeeting',
       payload: {
@@ -257,7 +252,7 @@ const ResearchTabs = ({
           type: 'question/fetchQuestionsByArticleId',
           payload: item._id,
         })
-      : !isEmpty(item.instructor)
+      : isEmpty(item.instructor)
       ? await dispatch({
           type: 'question/fetchQuestionsByVideoId',
           payload: item._id,
@@ -270,8 +265,6 @@ const ResearchTabs = ({
     setEnrollModalVisible(true);
     setEnrollMeeting(meeting);
   };
-  console.log('content', content);
-  console.log('listData', listData);
   return (
     <>
       <List
@@ -427,7 +420,6 @@ const ResearchTabs = ({
           }}
           dataSource={questionListData}
           renderItem={(question) => {
-            console.log('question', question);
             return (
               <List.Item>
                 <List.Item.Meta
@@ -499,7 +491,6 @@ const ResearchTabs = ({
         width={content === 'article' ? 1200 : 520}
         onCancel={handleCancel}
       >
-        {console.log('profileItemprofileItem', profileItem)}
         <Form
           labelCol={
             content === 'article' ? articleLayout.labelCol : layout.labelCol

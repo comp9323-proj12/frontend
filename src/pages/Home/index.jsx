@@ -19,7 +19,6 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
   useEffect(() => {
     setCurrentPageRoute(getSessionStorage('currentPage') || 'home');
   }, [currentPage]);
-  console.log(currentPageRoute);
   const routeMap = {
     home: <ResearcherList />,
     researcher: <ResearcherHomePage />,

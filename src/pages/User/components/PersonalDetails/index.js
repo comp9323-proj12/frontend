@@ -3,7 +3,6 @@ import { Row, Col, Tag, Avatar } from 'antd';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
 export const PersonalDetails = ({ user }) => {
-  console.log('user', user);
   return (
     <Row className={styles['personal-details']}>
       <Col span={8} className={styles['personal-details__info--main']}>

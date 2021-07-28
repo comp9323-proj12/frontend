@@ -19,7 +19,6 @@ const ResearcherItem = ({
   questions,
 }) => {
   const [extendInputIndex, setExtendInputIndex] = useState('');
-  console.log('content', content);
   const currentUser = getSessionStorage('currentUser');
   const handleReplySubmit = async (value) => {
     await dispatch({
@@ -44,7 +43,6 @@ const ResearcherItem = ({
     setExtendInputIndex('');
   };
   const handleQuestionSubmit = (value) => {
-    console.log('valuevalue', value);
     if (content.text) {
       dispatch({
         type: 'question/createQuestion',
@@ -65,14 +63,6 @@ const ResearcherItem = ({
       });
     }
   };
-  useEffect(() => {
-    if (content.text) {
-      dispatch({
-        type: 'question/fetchQuestionsByArticleId',
-        payload: content._id,
-      });
-    }
-  }, [content]);
   return (
     <Modal
       visible={visible}
@@ -117,8 +107,6 @@ const ResearcherItem = ({
             }}
             dataSource={questions}
             renderItem={(que) => {
-              console.log('que._id', que);
-              console.log('extendInputIndex', extendInputIndex);
               return (
                 <List.Item
                   key={que._id}
@@ -130,7 +118,6 @@ const ResearcherItem = ({
                     <span>{moment(que.createTime).format('DD/MM/YYYY')}</span>
                   </Row>
                   {que.replies.map((reply) => {
-                    console.log('reply', reply);
                     return (
                       <Row className={styles['researcher-item__replies']}>
                         <p>{reply.text}</p>

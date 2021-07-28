@@ -15,14 +15,10 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
   useEffect(() => {
     setActivateUser(getSessionStorage('activateContent'));
   }, [activateContent]);
-  console.log('useruserv', activateUser);
   const handleTabChange = (key) => {
     setTabContent(key);
   };
   useEffect(() => {
-    console.log('isProileid', currentUser);
-    console.log(currentUser._id === activateContent._id);
-    console.log('activateUser', activateUser);
     if (currentUser._id === activateUser._id) {
       setIsProfile(true);
     }

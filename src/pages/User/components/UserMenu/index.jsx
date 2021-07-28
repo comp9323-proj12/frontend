@@ -33,7 +33,6 @@ const UserMenu = ({ dispatch }) => {
       meeting: setCurrentModal,
       logout: logout,
     };
-    console.log('operation', operation);
     operationMap[operation](operation);
     setVisible(false);
   };
@@ -46,7 +45,6 @@ const UserMenu = ({ dispatch }) => {
       },
     });
   };
-  console.log('currentUser?.name[0]', currentUser?.name[0]);
   const layout = {
     labelCol: {
       span: 8,
