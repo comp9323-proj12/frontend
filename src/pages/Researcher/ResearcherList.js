@@ -7,11 +7,6 @@ import styles from './ResearcherList.less';
 const ResearcherList = ({ dispatch, researchers, currentPage }) => {
   const [researcherList, setResearcherList] = useState([]);
   useEffect(() => {
-    dispatch({
-      type: 'user/fetchResearchers',
-    });
-  }, []);
-  useEffect(() => {
     setResearcherList(researchers);
   }, [researchers]);
   const handleClickResearcher = (item) => {

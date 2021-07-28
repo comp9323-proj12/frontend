@@ -22,6 +22,7 @@ const Video = {
         });
       }
     },
+
     *createVideo({ payload }, { call, put }) {
       const response = yield call(createVideo, payload);
       yield put({

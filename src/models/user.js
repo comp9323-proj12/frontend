@@ -6,7 +6,6 @@ const User = {
     researchers: [],
   },
   effects: {
-    // Send { userName:xxx, password:xxx } to backend
     *fetchResearchers(_, { call, put }) {
       const response = yield call(getResearchers);
       if (response.status === 200) {
@@ -15,6 +14,16 @@ const User = {
           payload: response.data.researchers,
         });
       }
+    },
+    *searchResearchers({ payload }, { call, put }) {
+      const response = yield call(getResearchers);
+      const result = response.data.researchers.filter((user) =>
+        user.name.includes(payload),
+      );
+      yield put({
+        type: 'listResearchers',
+        payload: result,
+      });
     },
   },
 

@@ -8,11 +8,6 @@ import moment from 'moment';
 const ResearcherItem = ({
   dispatch,
   user,
-  articles,
-  videos,
-  meetings,
-  activateContent,
-  currentPage,
   visible,
   content,
   handleCancel,

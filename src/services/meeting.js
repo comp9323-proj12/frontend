@@ -16,6 +16,13 @@ export async function createMeeting(data) {
   });
 }
 
+export async function searchMeetings(data) {
+  return request({
+    method: 'GET',
+    url: `/meetings?subCategory=${data.subCategory}&value=${data.value}`,
+  });
+}
+
 export async function updateMeeting(data) {
   return request({
     method: 'PATCH',

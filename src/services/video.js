@@ -15,6 +15,13 @@ export async function createVideo(data) {
   });
 }
 
+export async function searchVideos(data) {
+  return request({
+    method: 'GET',
+    url: `/videos?subCategory=${data.subCategory}&value=${data.value}`,
+  });
+}
+
 export async function updateVideo(data) {
   return request({
     method: 'PATCH',
