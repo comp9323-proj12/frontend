@@ -8,7 +8,14 @@ import moment from 'moment';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 const { Search } = Input;
 const { Option } = Select;
-const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
+const SearcherBar = ({
+  set,
+  researchers,
+  searchArticlesResults,
+  searchMeetingsResults,
+  searchVideosResults,
+  dispatch,
+}) => {
   const [form] = Form.useForm();
   const currentUser = getSessionStorage('currentUser');
   const [isSearchModalVisible, setIsSearchModalVisible] = useState(false);
@@ -16,6 +23,7 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
   const [category, setCategory] = useState('');
   const [modalItem, setModalItem] = useState({});
   const [listData, setListData] = useState([]);
+  const [enrollMeeting, setEnrollMeeting] = useState({});
   const [enrollModalVisible, setEnrollModalVisible] = useState(false);
   const renderItemModal = (item) => {
     setModalItem(item);
@@ -102,19 +110,30 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
   const handleItemCancel = () => {
     setIsItemModalVisible(false);
   };
+  const renderDescription = (item) => {
+    return item.instructor ? (
+      <p>{item.link}</p>
+    ) : (
+      <>
+        <img src={require('@/images/video-thumbnail.jpeg')} />
+        <p>{item.link}</p>
+      </>
+    );
+  };
   useEffect(() => {
     setListData(searchArticlesResults);
   }, [searchArticlesResults]);
-  // useEffect(() => {
-  // 	setListData(searchMeetingsResults);
-  // }, [searchMeetingsResults]);
-  // useEffect(() => {
-  // 	setListData(searchVideosResults);
-  // }, [searchVideosResults]);
+  useEffect(() => {
+    setListData(searchMeetingsResults);
+  }, [searchMeetingsResults]);
+  useEffect(() => {
+    setListData(searchVideosResults);
+  }, [searchVideosResults]);
   return (
     <>
-      <Form form={form} name="search">
+      <Form form={form} name="search" className={styles['search-bar']}>
         <Form.Item
+          className={styles['search-bar__select']}
           name="mainCategory"
           label="Main category"
           initialValue="user"
@@ -128,6 +147,7 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
         </Form.Item>
         {!isEmpty(category) && category !== 'user' && (
           <Form.Item
+            className={styles['search-bar__select']}
             name="subCategory"
             label="Sub category"
             initialValue="title"
@@ -157,9 +177,10 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
         title="Search result"
         visible={isSearchModalVisible}
         footer={null}
-        maskClosable={false}
+        maskClosable={!isItemModalVisible}
         onCancel={handleSearchCancel}
         destroyOnClose={true}
+        width={1200}
       >
         <List
           size="large"
@@ -176,19 +197,18 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
               }}
               extra={
                 <>
-                  {item.instructor?._id !== currentUser._id &&
-                    !item.students?.includes(currentUser._id) && (
-                      <>
-                        <Button
-                          className={styles['search-modal__profile-button']}
-                          onClick={(e) => {
-                            openEnrollModal(e, item);
-                          }}
-                        >
-                          Enroll meeting
-                        </Button>
-                      </>
-                    )}
+                  {category === 'meeting' && (
+                    <>
+                      <Button
+                        className={styles['search-modal__profile-button']}
+                        onClick={(e) => {
+                          openEnrollModal(e, item);
+                        }}
+                      >
+                        Enroll meeting
+                      </Button>
+                    </>
+                  )}
                 </>
               }
             >
@@ -252,8 +272,15 @@ const SearcherBar = ({ set, researchers, searchArticlesResults, dispatch }) => {
 };
 
 export default connect(
-  ({ user: { researchers }, article: { searchArticlesResults } }) => ({
+  ({
+    user: { researchers },
+    article: { searchArticlesResults },
+    video: { searchVideosResults },
+    meeting: { searchMeetingsResults },
+  }) => ({
     researchers,
     searchArticlesResults,
+    searchMeetingsResults,
+    searchVideosResults,
   }),
 )(SearcherBar);
