@@ -5,13 +5,16 @@ import ResearcherHomePage from './ResearcherHomePage';
 import styles from './ResearcherList.less';
 
 const ResearcherList = ({ dispatch, researchers, currentPage }) => {
-  // const [user, setUser] = useState(null);
+  const [researcherList, setResearcherList] = useState([]);
   console.log('currentPagecurrentPage', currentPage);
   useEffect(() => {
     dispatch({
       type: 'user/fetchResearchers',
     });
   }, []);
+  useEffect(() => {
+    setResearcherList(researchers);
+  }, [researchers]);
   const handleClickResearcher = (item) => {
     console.log('item', item);
     dispatch({
@@ -38,7 +41,7 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
       pagination={{
         pageSize: 8,
       }}
-      dataSource={researchers}
+      dataSource={researcherList}
       renderItem={(item) => (
         <List.Item
           className={styles['researcher-list__item']}
