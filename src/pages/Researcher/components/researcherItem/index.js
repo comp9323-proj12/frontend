@@ -5,6 +5,7 @@ import { List, Row, Col, Modal, Form, Button, Input } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
+import { FieldTimeOutlined } from '@ant-design/icons';
 const ResearcherItem = ({
   dispatch,
   user,
@@ -70,6 +71,7 @@ const ResearcherItem = ({
     >
       <Row className={styles['researcher-item__main--info']}>
         <h4>{content.title}</h4>
+        <FieldTimeOutlined />
         <span>
           Create time: {moment(content.createTime).format('DD/MM/YYYY')}
         </span>

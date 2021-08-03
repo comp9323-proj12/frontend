@@ -12,7 +12,16 @@ import {
   TimePicker,
 } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  TagsTwoTone,
+  CalendarOutlined,
+  FieldTimeOutlined,
+  QuestionCircleTwoTone,
+  EditTwoTone,
+  DeleteTwoTone,
+} from '@ant-design/icons';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
 import styles from './index.less';
@@ -304,6 +313,7 @@ const ResearchTabs = ({
                           openQuestionModal(e, item);
                         }}
                       >
+                        <QuestionCircleTwoTone />
                         Check Question
                       </Button>
                     )}
@@ -327,6 +337,7 @@ const ResearchTabs = ({
                         setEditModalVisible(true);
                       }}
                     >
+                      <EditTwoTone />
                       edit
                     </Button>
                     <Button
@@ -338,6 +349,7 @@ const ResearchTabs = ({
                         // handleDelete(item);
                       }}
                     >
+                      <DeleteTwoTone />
                       delete
                     </Button>
                   </>
@@ -346,6 +358,7 @@ const ResearchTabs = ({
             }
           >
             <Tag className={styles['research-tabs__time']}>
+              <FieldTimeOutlined />
               {'Create time: ' + moment(item.createTime).format('DD/MM/YYYY')}
             </Tag>
             {item.startTime && (
@@ -375,6 +388,7 @@ const ResearchTabs = ({
                 description={renderDescription(item)}
               />
             )}
+            {item?.tags && <TagsTwoTone />}
             {item?.tags?.map((tag, index) => {
               return (
                 <Tag
@@ -526,7 +540,12 @@ const ResearchTabs = ({
             <>
               <Form.Item
                 name="startDate"
-                label="Start Date"
+                label={
+                  <>
+                    <CalendarOutlined />
+                    Start Date
+                  </>
+                }
                 rules={[
                   {
                     required: true,
@@ -538,7 +557,11 @@ const ResearchTabs = ({
               </Form.Item>
               <Form.Item
                 name="startTime"
-                label="Start Time"
+                label={
+                  <>
+                    <FieldTimeOutlined /> Start Time
+                  </>
+                }
                 rules={[
                   {
                     required: true,

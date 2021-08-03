@@ -14,7 +14,17 @@ import {
 import { isEmpty } from 'lodash';
 import { connect, Dispatch } from 'umi';
 import { getSessionStorage } from '@/utils/storageHelper';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  TagsOutlined,
+  EditOutlined,
+  FieldTimeOutlined,
+  CalendarOutlined,
+  LinkOutlined,
+  UploadOutlined,
+  UsergroupAddOutlined,
+} from '@ant-design/icons';
 import styles from './index.less';
 import moment from 'moment';
 // import styles from './index.less';
@@ -37,9 +47,21 @@ const UploadMaterialModal = ({
   const articleMounted = useRef();
   const meetingMounted = useRef();
   const titleMap = {
-    article: 'Upload Text Story',
-    video: 'Upload Video Story',
-    meeting: 'Hold Meeting',
+    article: (
+      <>
+        <UploadOutlined /> Upload Text Story
+      </>
+    ),
+    video: (
+      <>
+        <UploadOutlined /> Upload Video Story
+      </>
+    ),
+    meeting: (
+      <>
+        <UsergroupAddOutlined /> Hold Meeting
+      </>
+    ),
   };
   const layout = {
     labelCol: {
@@ -185,7 +207,15 @@ const UploadMaterialModal = ({
           <Input />
         </Form.Item>
         {currentModal === 'article' && (
-          <Form.Item name="text" label="Content">
+          <Form.Item
+            name="text"
+            label={
+              <>
+                <EditOutlined />
+                Content
+              </>
+            }
+          >
             <Input.TextArea />
           </Form.Item>
         )}
@@ -197,7 +227,12 @@ const UploadMaterialModal = ({
             </Form.Item> */}
             <Form.Item
               name="startDate"
-              label="Start Date"
+              label={
+                <>
+                  <CalendarOutlined />
+                  Start Date
+                </>
+              }
               rules={[
                 {
                   required: true,
@@ -209,7 +244,12 @@ const UploadMaterialModal = ({
             </Form.Item>
             <Form.Item
               name="startTime"
-              label="Start Time"
+              label={
+                <>
+                  <FieldTimeOutlined />
+                  Start Time
+                </>
+              }
               rules={[
                 {
                   required: true,
@@ -222,16 +262,39 @@ const UploadMaterialModal = ({
           </>
         )}
         {(currentModal === 'video' || currentModal === 'meeting') && (
-          <Form.Item name="link" label="Link">
+          <Form.Item
+            name="link"
+            label={
+              <>
+                <LinkOutlined />
+                Link
+              </>
+            }
+          >
             <Input />
           </Form.Item>
         )}
         {(currentModal === 'video' || currentModal === 'meeting') && (
-          <Form.Item name="description" label="Description">
+          <Form.Item
+            name="description"
+            label={
+              <>
+                <EditOutlined />
+                Description
+              </>
+            }
+          >
             <Input.TextArea />
           </Form.Item>
         )}
-        <Form.Item label="Tags">
+        <Form.Item
+          label={
+            <>
+              <TagsOutlined />
+              Tags
+            </>
+          }
+        >
           <Form.List name="tags">
             {(fields, { add, remove }, { errors }) => (
               <>

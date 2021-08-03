@@ -6,6 +6,7 @@ import { connect, Dispatch } from 'umi';
 import { getSessionStorage } from '@/utils/storageHelper';
 import moment from 'moment';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
+import { FieldTimeOutlined } from '@ant-design/icons';
 const { Search } = Input;
 const { Option } = Select;
 const SearcherBar = ({
@@ -210,6 +211,7 @@ const SearcherBar = ({
               }
             >
               <Tag className={styles['search-modal__time']}>
+                <FieldTimeOutlined />
                 {'Create time: ' + moment(item.createTime).format('DD/MM/YYYY')}
               </Tag>
               {item.startTime && (

@@ -6,6 +6,11 @@ import { isEmpty } from 'lodash';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { PersonalDetails } from '@/pages/User/components/PersonalDetails';
 import ResearchTabs from './components/ResearchTabs';
+import {
+  VideoCameraOutlined,
+  FileTextOutlined,
+  UsergroupAddOutlined,
+} from '@ant-design/icons';
 const { TabPane } = Tabs;
 const ResearcherHomePage = ({ dispatch, activateContent }) => {
   const [activateUser, setActivateUser] = useState({});
@@ -33,21 +38,45 @@ const ResearcherHomePage = ({ dispatch, activateContent }) => {
             onChange={handleTabChange}
             className={styles['researcher-home-page__tabs']}
           >
-            <TabPane tab="Text Story" key="article">
+            <TabPane
+              tab={
+                <>
+                  <FileTextOutlined />
+                  Text Story
+                </>
+              }
+              key="article"
+            >
               <ResearchTabs
                 user={activateUser}
                 content={tabContent}
                 isProfile={isProfile}
               />
             </TabPane>
-            <TabPane tab="Video Story" key="video">
+            <TabPane
+              tab={
+                <>
+                  <VideoCameraOutlined />
+                  Video Story{' '}
+                </>
+              }
+              key="video"
+            >
               <ResearchTabs
                 user={activateUser}
                 content={tabContent}
                 isProfile={isProfile}
               />
             </TabPane>
-            <TabPane tab="Meeting" key="meeting">
+            <TabPane
+              tab={
+                <>
+                  <UsergroupAddOutlined />
+                  Meeting
+                </>
+              }
+              key="meeting"
+            >
               <ResearchTabs
                 user={activateUser}
                 content={tabContent}
