@@ -1,18 +1,25 @@
 .research-tabs {
   &__time {
     background-color: transparent;
-    border-color: #cce5ff;
     padding: 3px 6px;
-    border-radius: 10px;
+    border: none;
   }
   &__list-item {
-    padding-bottom: 50px;
+    background-color: white;
+    padding: 10px 20px 50px 20px;
+    border-bottom: 2px solid #e6e6e6;
+    box-shadow: 5px 0 5px 1px #e6e6e6;
+    margin-bottom: 20px;
+    :global {
+      .anticon {
+        margin-right: 6px;
+      }
+    }
   }
   &__profile-button {
-    background-color: #cce5ff;
-    border: 2px solid #b3d7ff;
+    border: 1px solid #b3d7ff;
     font-size: 16px;
-    border-radius: 10px;
+    border-radius: 5px;
     margin-right: 10px;
     padding-top: 2px;
     font-weight: 300;
@@ -30,16 +37,12 @@
   &__question-modal {
     :global {
       .ant-modal-content {
-        background-color: #e6f2ff;
       }
       .ant-modal-header {
-        background-color: #e6f2ff;
-        border-bottom: 1px solid #b3d7ff;
       }
       .ant-list-item {
         border-bottom: 1px solid #b3d7ff;
         button {
-          background-color: transparent;
           border-radius: 5px;
           border: 1px solid #b3d7ff;
         }
@@ -50,11 +53,9 @@
     }
     font-size: 16px;
     button:hover {
-      background-color: #99caff;
     }
   }
   &__tags {
     border-radius: 4px;
-    // font-size: 12px;
   }
 }

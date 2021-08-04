@@ -21,9 +21,11 @@ const ResearcherList = ({ dispatch, researchers, currentPage }) => {
   };
   return (
     <List
+      header={<h2>Researcher List</h2>}
+      className={styles['researcher-list']}
       size="large"
       grid={{
-        gutter: 16,
+        gutter: 32,
         xs: 2,
         sm: 2,
         md: 4,

@@ -9,6 +9,13 @@
       }
       span {
         display: block;
+        :global {
+          .anticon {
+            display: inline-block;
+            margin-right: 6px;
+            padding-left: 0;
+          }
+        }
         padding-left: 40px;
       }
       :global {
@@ -32,7 +39,6 @@
         .ant-tag {
           font-size: 12px;
           border-radius: 4px;
-          background-color: #cce5ff;
           border-color: #b3d7ff;
           margin-bottom: 10px;
         }
