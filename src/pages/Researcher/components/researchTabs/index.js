@@ -21,6 +21,10 @@ import {
   QuestionCircleTwoTone,
   EditTwoTone,
   DeleteTwoTone,
+  CommentOutlined,
+  UsergroupAddOutlined,
+  HeartFilled,
+  LikeFilled,
 } from '@ant-design/icons';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
@@ -33,7 +37,6 @@ const ResearchTabs = ({
   userArticles,
   userVideos,
   userMeetings,
-  currentPage,
   isProfile,
   questions,
 }) => {
@@ -62,6 +65,7 @@ const ResearchTabs = ({
     editForm.setFieldsValue({});
     replyForm.resetFields();
     setIsReplyVisibleId('');
+    contentMap[content]();
   };
   const layout = {
     labelCol: {
@@ -244,6 +248,41 @@ const ResearchTabs = ({
     });
     setEnrollModalVisible(false);
   };
+  const handleLike = async (e, item) => {
+    e.stopPropagation();
+    let newLike = item.like;
+    newLike.push(currentUser._id);
+    const likeMap = {
+      meeting: async () => {
+        await dispatch({
+          type: 'meeting/updateMeeting',
+          payload: {
+            ...item,
+            like: newLike,
+          },
+        });
+      },
+      article: async () => {
+        await dispatch({
+          type: 'article/updateArticle',
+          payload: {
+            ...item,
+            like: newLike,
+          },
+        });
+      },
+      video: async () => {
+        await dispatch({
+          type: 'video/updateVideo',
+          payload: {
+            ...item,
+            like: newLike,
+          },
+        });
+      },
+    };
+    likeMap[content]();
+  };
   const renderDescription = (item) => {
     return item.instructor ? (
       <p>{item.link}</p>
@@ -363,12 +402,15 @@ const ResearchTabs = ({
             </Tag>
             {item.startTime && (
               <Tag className={styles['research-tabs__time']}>
+                <FieldTimeOutlined />
                 {'Start time: ' +
                   moment(item.startTime).format('DD/MM/YYYY HH:mm:ss')}
               </Tag>
             )}
             {content === 'meeting' && (
-              <span> Enroll number: {item.students?.length} </span>
+              <span>
+                <UsergroupAddOutlined /> Enroll number: {item.students?.length}
+              </span>
             )}
             {item.text && (
               <List.Item.Meta
@@ -388,7 +430,27 @@ const ResearchTabs = ({
                 description={renderDescription(item)}
               />
             )}
-            {item?.tags && <TagsTwoTone />}
+            {!isProfile && !item.like.includes(currentUser._id) && (
+              <Button
+                className={styles['research-tabs__like']}
+                onClick={(e) => {
+                  handleLike(e, item);
+                }}
+              >
+                <LikeFilled /> Like?
+              </Button>
+            )}
+            {!isProfile && item.like.includes(currentUser._id) && (
+              <span className={styles['research-tabs__like']}>
+                <HeartFilled /> Like!
+              </span>
+            )}
+            {isProfile && (
+              <span className={styles['research-tabs__like']}>
+                <HeartFilled /> {item.like.length}
+              </span>
+            )}
+            {!isEmpty(item?.tags) && <TagsTwoTone />}
             {item?.tags?.map((tag, index) => {
               return (
                 <Tag
@@ -407,6 +469,7 @@ const ResearchTabs = ({
         visible={visible}
         content={modalItem}
         user={user}
+        category={content}
         handleCancel={handleCancel}
       />
       <Modal
@@ -453,8 +516,8 @@ const ResearchTabs = ({
                       setIsReplyVisibleId(question._id);
                     }}
                   >
-                    {' '}
-                    Reply{' '}
+                    <CommentOutlined />
+                    Reply
                   </Button>
                 )}
                 {isReplyVisibleId === question._id && (

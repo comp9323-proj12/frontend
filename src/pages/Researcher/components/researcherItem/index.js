@@ -5,12 +5,18 @@ import { List, Row, Col, Modal, Form, Button, Input } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import { FieldTimeOutlined } from '@ant-design/icons';
+import {
+  FieldTimeOutlined,
+  CommentOutlined,
+  LikeFilled,
+  HeartFilled,
+} from '@ant-design/icons';
 const ResearcherItem = ({
   dispatch,
   user,
   visible,
   content,
+  category,
   handleCancel,
   questions,
 }) => {
@@ -59,10 +65,66 @@ const ResearcherItem = ({
       });
     }
   };
+  const handleLike = async (e) => {
+    e.stopPropagation();
+    let newLike = content.like;
+    newLike.push(currentUser._id);
+    const likeMap = {
+      meeting: async () => {
+        await dispatch({
+          type: 'meeting/updateMeeting',
+          payload: {
+            ...content,
+            like: newLike,
+          },
+        });
+      },
+      article: async () => {
+        await dispatch({
+          type: 'article/updateArticle',
+          payload: {
+            ...content,
+            like: newLike,
+          },
+        });
+      },
+      video: async () => {
+        await dispatch({
+          type: 'video/updateVideo',
+          payload: {
+            ...content,
+            like: newLike,
+          },
+        });
+      },
+    };
+    likeMap[category]();
+  };
   return (
     <Modal
       visible={visible}
-      title={content.title}
+      title={
+        <>
+          <h1>{content.title}</h1>
+          {user._id !== currentUser._id &&
+            !content?.like?.includes(currentUser._id) && (
+              <Button
+                className={styles['researcher-item__like']}
+                onClick={(e) => {
+                  handleLike(e);
+                }}
+              >
+                <LikeFilled /> Like?
+              </Button>
+            )}
+          {user._id !== currentUser._id &&
+            content?.like?.includes(currentUser._id) && (
+              <span className={styles['researcher-item__like']}>
+                <HeartFilled /> Like!
+              </span>
+            )}
+        </>
+      }
       destroyOnClose={true}
       onCancel={handleCancel}
       footer={null}
@@ -130,6 +192,7 @@ const ResearcherItem = ({
                       setExtendInputIndex(que._id);
                     }}
                   >
+                    <CommentOutlined />
                     Reply
                   </Button>
                   {extendInputIndex === que._id && (
