@@ -141,7 +141,7 @@ const ResearcherItem = ({
       </Row>
       {content.text && (
         <p className={styles['researcher-item__main--content']}>
-          {content.text}
+          <span dangerouslySetInnerHTML={{ __html: content.text }} />
         </p>
       )}
       {content.description && (
