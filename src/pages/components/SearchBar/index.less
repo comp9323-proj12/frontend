@@ -7,10 +7,21 @@
   }
   &__time {
     background-color: transparent;
-    // border-color: #cce5ff;
-    box-shadow: 2px 2px 1px #e6e6e6;
+    border: none;
     padding: 3px 6px;
-    border-radius: 5px;
+  }
+  &__info {
+    flex-flow: column wrap;
+    margin-right: 10px;
+  }
+  &__like {
+    border: none;
+    padding-right: 10px;
+    :global {
+      .anticon-heart {
+        color: red;
+      }
+    }
   }
   &__list-item {
     padding-bottom: 50px;

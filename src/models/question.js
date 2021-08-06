@@ -49,15 +49,6 @@ const Question = {
         questions: payload,
       };
     },
-    //   putCreateMeetingStatus(state, action) {
-    // 	const { payload } = action;
-    // 	return {
-    // 	  ...state,
-    // 	  createMeetingStatus: payload,
-    // 	  reversalMeetingStatus: !state.reversalMeetingStatus,
-    // 	};
-    //   },
-    // },
   },
 };
 export default Question;

@@ -6,12 +6,14 @@ import { connect, Dispatch } from 'umi';
 import { getSessionStorage } from '@/utils/storageHelper';
 import moment from 'moment';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
-import { FieldTimeOutlined } from '@ant-design/icons';
+import {
+  FieldTimeOutlined,
+  UsergroupAddOutlined,
+  HeartFilled,
+} from '@ant-design/icons';
 const { Search } = Input;
 const { Option } = Select;
 const SearcherBar = ({
-  set,
-  researchers,
   searchArticlesResults,
   searchMeetingsResults,
   searchVideosResults,
@@ -42,6 +44,18 @@ const SearcherBar = ({
         });
       }
     }
+  };
+  const handleEnrollMeeting = () => {
+    let students = enrollMeeting.students;
+    students.push(currentUser._id);
+    dispatch({
+      type: 'meeting/updateMeeting',
+      payload: {
+        ...enrollMeeting,
+        students,
+      },
+    });
+    setEnrollModalVisible(false);
   };
   const onSearch = async (mainCategory, subCategory, value) => {
     mainCategory === 'user'
@@ -105,8 +119,9 @@ const SearcherBar = ({
   const handleSearchCancel = () => {
     setIsSearchModalVisible(false);
   };
-  const handleItemCancel = () => {
+  const handleCancel = () => {
     setIsItemModalVisible(false);
+    setEnrollModalVisible(false);
   };
   const renderDescription = (item) => {
     return item.instructor ? (
@@ -195,42 +210,65 @@ const SearcherBar = ({
               }}
               extra={
                 <>
-                  {category === 'meeting' && (
-                    <>
-                      <Button
-                        className={styles['search-modal__profile-button']}
-                        onClick={(e) => {
-                          openEnrollModal(e, item);
-                        }}
-                      >
-                        Enroll meeting
-                      </Button>
-                    </>
-                  )}
+                  {category === 'meeting' &&
+                    item.instructor !== currentUser._id &&
+                    !item.students?.includes(currentUser._id) && (
+                      <>
+                        <Button
+                          className={styles['search-modal__profile-button']}
+                          onClick={(e) => {
+                            openEnrollModal(e, item);
+                          }}
+                        >
+                          Enroll meeting
+                        </Button>
+                        <Modal
+                          title="Enroll"
+                          visible={enrollModalVisible}
+                          destroyOnClose={true}
+                          onOk={handleEnrollMeeting}
+                          onCancel={handleCancel}
+                          className={styles['search-modal__enroll']}
+                        >
+                          <p>Are you sure to enroll {enrollMeeting.title} ?</p>
+                        </Modal>
+                      </>
+                    )}
                 </>
               }
             >
-              <Tag className={styles['search-modal__time']}>
-                <FieldTimeOutlined />
-                {'Create time: ' + moment(item.createTime).format('DD/MM/YYYY')}
-              </Tag>
-              {item.startTime && (
+              <Row className={styles['search-modal__info']}>
                 <Tag className={styles['search-modal__time']}>
-                  {'Start time: ' +
-                    moment(item.startTime).format('DD/MM/YYYY HH:mm:ss')}
+                  <FieldTimeOutlined />
+                  {'Create time: ' +
+                    moment(item.createTime).format('DD/MM/YYYY')}
                 </Tag>
-              )}
+                {item.startTime && (
+                  <Tag className={styles['search-modal__time']}>
+                    {'Start time: ' +
+                      moment(item.startTime).format('DD/MM/YYYY HH:mm:ss')}
+                  </Tag>
+                )}
+              </Row>
               {category === 'meeting' && (
-                <span> Enroll number: {item.students?.length} </span>
+                <span>
+                  <UsergroupAddOutlined /> Enroll number:{' '}
+                  {item.students?.length}
+                </span>
               )}
               {item.text && (
                 <List.Item.Meta
                   className={styles['search-modal__meta']}
                   title={item.title}
                   description={
-                    item.text.length > 50
-                      ? item.text.slice(0, 50) + '...'
-                      : item.text
+                    <>
+                      <span>Author: {item.author.name}</span>
+                      <p>
+                        {item.text.length > 50
+                          ? item.text.slice(0, 50) + '...'
+                          : item.text}
+                      </p>
+                    </>
                   }
                 />
               )}
@@ -241,6 +279,11 @@ const SearcherBar = ({
                   description={renderDescription(item)}
                 />
               )}
+              {
+                <span className={styles['search-modal__like']}>
+                  <HeartFilled /> {item.like.length}
+                </span>
+              }
               {item?.tags?.map((tag, index) => {
                 return (
                   <Tag
@@ -260,10 +303,11 @@ const SearcherBar = ({
         <ResearcherItem
           visible={isItemModalVisible}
           content={modalItem}
+          category={category}
           user={
             !isEmpty(modalItem.author) ? modalItem.author : modalItem.instructor
           }
-          handleCancel={handleItemCancel}
+          handleCancel={handleCancel}
         ></ResearcherItem>
       )}
     </>
