@@ -45,9 +45,9 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
           <UserMenu />
         </Col>
       </Row>
-      {routeMap[currentPageRoute]}
+
       {/* footer */}
-      <section className={styles['push']}></section>
+      <section className={styles['push']}>{routeMap[currentPageRoute]}</section>
       <Row className={styles['footer']}>
         <Col span={6} className={styles['footer__logo']}>
           <Logo />
