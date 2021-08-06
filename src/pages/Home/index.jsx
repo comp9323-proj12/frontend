@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Link, Dispatch } from 'umi';
-import { Button, Carousel, Row, Col, Avatar } from 'antd';
+import { Button, Carousel, Row, Col, Avatar, Layout } from 'antd';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
 import Logo from '../components/Logo';
 import SearchBar from '../components/SearchBar';
 import UserMenu from '../User/components/UserMenu';
+import Copyright from '../components/Footer';
 import ResearcherHomePage from '../Researcher/ResearcherHomePage';
 import ResearcherList from '../Researcher/ResearcherList';
 import {
@@ -13,6 +14,8 @@ import {
   removeSessionStorage,
   getSessionStorage,
 } from '@/utils/storageHelper';
+
+const { Header, Content, Footer } = Layout;
 
 const Home = ({ dispatch, currentPage, activateContent }) => {
   const [currentPageRoute, setCurrentPageRoute] = useState('home');
@@ -43,6 +46,16 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
         </Col>
       </Row>
       {routeMap[currentPageRoute]}
+      {/* footer */}
+      <section className={styles['push']}></section>
+      <Row className={styles['footer']}>
+        <Col span={6} className={styles['footer__logo']}>
+          <Logo />
+        </Col>
+        <Col span={18} className={styles['footer__content']}>
+          <Copyright />
+        </Col>
+      </Row>
     </div>
   );
 };
