@@ -30,6 +30,10 @@ import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
+//import { Button, notification, Card } from 'antd';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 const ResearchTabs = ({
   dispatch,
   content,
@@ -596,7 +600,7 @@ const ResearchTabs = ({
           </Form.Item>
           {currentModal === 'article' && (
             <Form.Item name="text" label="Content">
-              <Input.TextArea />
+              <ReactQuill className={styles['research-tabs__ql-editor']} />
             </Form.Item>
           )}
           {currentModal === 'meeting' && (
@@ -646,7 +650,7 @@ const ResearchTabs = ({
               <Input.TextArea />
             </Form.Item>
           )}
-          <Form.Item label="Tags">
+          <Form.Item label="Tags" style={{ marginTop: 65 }}>
             <Form.List name="tags">
               {(fields, { add, remove }, { errors }) => (
                 <>

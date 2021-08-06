@@ -28,6 +28,9 @@ import {
 import styles from './index.less';
 import moment from 'moment';
 // import styles from './index.less';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 const UploadMaterialModal = ({
   dispatch,
   currentModal,
@@ -216,7 +219,7 @@ const UploadMaterialModal = ({
               </>
             }
           >
-            <Input.TextArea />
+            <ReactQuill />
           </Form.Item>
         )}
         {currentModal === 'meeting' && (
