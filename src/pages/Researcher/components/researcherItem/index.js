@@ -10,6 +10,7 @@ import {
   CommentOutlined,
   LikeFilled,
   HeartFilled,
+  ContainerOutlined,
 } from '@ant-design/icons';
 const ResearcherItem = ({
   dispatch,
@@ -21,7 +22,11 @@ const ResearcherItem = ({
   questions,
 }) => {
   const [extendInputIndex, setExtendInputIndex] = useState('');
+  const [itemContent, setItemContent] = useState({});
   const currentUser = getSessionStorage('currentUser');
+  // useEffect(()=>{
+  //   setItemContent(content)
+  // },[content])
   const handleReplySubmit = async (value) => {
     await dispatch({
       type: 'question/createReply',
@@ -43,6 +48,26 @@ const ResearcherItem = ({
       });
     }
     setExtendInputIndex('');
+  };
+  const contentMap = {
+    article: async () => {
+      await dispatch({
+        type: 'article/fetchArticlesByUserId',
+        payload: user._id,
+      });
+    },
+    video: async () => {
+      await dispatch({
+        type: 'video/fetchVideosByUserId',
+        payload: user._id,
+      });
+    },
+    meeting: async () => {
+      await dispatch({
+        type: 'meeting/fetchMeetingsByUserId',
+        payload: user._id,
+      });
+    },
   };
   const handleQuestionSubmit = (value) => {
     if (content.text) {
@@ -98,7 +123,8 @@ const ResearcherItem = ({
         });
       },
     };
-    likeMap[category]();
+    await likeMap[category]();
+    contentMap[category]();
   };
   return (
     <Modal
@@ -133,6 +159,12 @@ const ResearcherItem = ({
     >
       <Row className={styles['researcher-item__main--info']}>
         <h4>{content.title}</h4>
+        {!isEmpty(content.category) && (
+          <>
+            <ContainerOutlined />
+            <span>Category: {content.category}</span>
+          </>
+        )}
         <FieldTimeOutlined />
         <span>
           Create time: {moment(content.createTime).format('DD/MM/YYYY')}
