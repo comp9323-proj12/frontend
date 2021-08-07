@@ -444,11 +444,12 @@ const ResearchTabs = ({
               <List.Item.Meta
                 className={styles['research-tabs__meta']}
                 title={item.title}
-                description={
-                  item.text.length > 50
-                    ? item.text.slice(0, 50) + '...'
-                    : item.text
-                }
+                description={(() => {
+                  const rawDescription = item.text.replace(/<.*?>/g, '');
+                  return rawDescription.length > 50
+                    ? rawDescription.slice(0, 50) + '...'
+                    : rawDescription;
+                })()}
               />
             )}
             {!item.text && (
@@ -457,7 +458,21 @@ const ResearchTabs = ({
                 title={item.title}
                 description={
                   <>
-                    {renderImage(item)} <a>{item.link}</a>
+                    {renderImage(item)}{' '}
+                    <a
+                      target="_blank"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      href={
+                        item.link.startsWith('http://') ||
+                        item.link.startsWith('https://')
+                          ? item.link
+                          : `http://${item.link}`
+                      }
+                    >
+                      {item.link}
+                    </a>
                   </>
                 }
               />

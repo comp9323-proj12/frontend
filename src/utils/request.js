@@ -38,7 +38,7 @@ const codeMessage = {
   504: 'Gateway Timeout',
 };
 
-export const baseURL = 'https://boiling-shelf-99404.herokuapp.com/';
+export const baseURL = 'http://localhost:4000/';
 const withCredentials = false;
 const timeout = 30000;
 
