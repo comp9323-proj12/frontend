@@ -19,9 +19,10 @@ const Logo = ({ dispatch }) => {
     <Avatar
       onClick={returnHome}
       className={styles.logo}
+      shape="square"
       size={110}
       alt="LOGO"
-      src={require('@/images/logo_transparent.png')}
+      src={require('@/images/logo_transparent2.png')}
     />
   );
 };

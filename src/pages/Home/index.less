@@ -21,6 +21,7 @@
   }
 }
 .navigation {
+  background-image: url(../../../src/images/header_banner.png);
   margin-bottom: 30px;
   margin-right: 20px;
   border-bottom: 2px solid #cce5ff;
@@ -30,6 +31,8 @@
     }
   }
   &__logo {
+    padding-top: 15px;
+    padding-left: 50px;
     button {
       border: none;
       background-color: transparent;
@@ -45,11 +48,13 @@
     :global {
       .ant-avatar {
         margin-right: 10px;
+        background-color: white;
         span {
           margin-top: -1px;
           font-size: 22px;
           color: #b3d7ff;
           cursor: default;
+          size: 'large';
         }
       }
     }
@@ -63,7 +68,8 @@
   color: white;
 
   &__logo {
-    padding-left: 10%;
+    padding-left: 5%;
+    padding-top: 5%;
     button {
       border: none;
       background-color: transparent;
