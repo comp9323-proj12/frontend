@@ -32,17 +32,12 @@
     h4 {
       font-size: 16px;
     }
-    img {
-      width: 320px;
-      height: auto;
+    a {
+      display: block;
     }
   }
   &__question-modal {
     :global {
-      .ant-modal-content {
-      }
-      .ant-modal-header {
-      }
       .ant-list-item {
         border-bottom: 1px solid #b3d7ff;
         button {
@@ -55,25 +50,30 @@
       }
     }
     font-size: 16px;
-    button:hover {
-    }
   }
   &__tags {
     border-radius: 4px;
   }
   &__ql-editor {
     height: 500px;
-    &__like {
-      border: none;
-      padding-right: 10px;
-      :global {
-        .anticon-heart {
-          color: red;
-        }
-        .anticon-like {
-          color: #b3d7ff;
-        }
+  }
+  &__like {
+    border: none;
+    padding-right: 10px;
+    :global {
+      .anticon-heart {
+        color: red;
+      }
+      .anticon-like {
+        color: #b3d7ff;
       }
     }
   }
+}
+
+img.research-tabs__image {
+  padding: 10px 20px;
+  width: 320px;
+  max-width: 100%;
+  height: auto;
 }

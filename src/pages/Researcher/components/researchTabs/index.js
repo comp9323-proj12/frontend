@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect, Dispatch } from 'umi';
-// import styles from './index.less';
 import {
   List,
   Tag,
@@ -8,6 +7,8 @@ import {
   Modal,
   Form,
   Input,
+  Radio,
+  Image,
   DatePicker,
   TimePicker,
 } from 'antd';
@@ -26,11 +27,11 @@ import {
   HeartFilled,
   LikeFilled,
 } from '@ant-design/icons';
+import { VIDEO_CATEGORY, MEETING_CATEGORY } from '@/utils/constants';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
-//import { Button, notification, Card } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -57,6 +58,7 @@ const ResearchTabs = ({
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [questionModalVisible, setQuestionModalVisible] = useState(false);
+  const [categoryValue, setCategoryValue] = useState('');
   const [modalItem, setModalItem] = useState({});
   const [profileItem, setProfileItem] = useState({});
   const [currentModal, setCurrentModal] = useState('');
@@ -69,7 +71,6 @@ const ResearchTabs = ({
     editForm.setFieldsValue({});
     replyForm.resetFields();
     setIsReplyVisibleId('');
-    contentMap[content]();
   };
   const layout = {
     labelCol: {
@@ -118,7 +119,7 @@ const ResearchTabs = ({
       video: async () => {
         await dispatch({
           type: 'video/updateVideo',
-          payload: { ...profileItem, ...values },
+          payload: { ...profileItem, ...values, category: categoryValue },
         });
         dispatch({
           type: 'video/fetchVideosByUserId',
@@ -128,7 +129,7 @@ const ResearchTabs = ({
       meeting: async () => {
         await dispatch({
           type: 'meeting/updateMeeting',
-          payload: { ...profileItem, ...values },
+          payload: { ...profileItem, ...values, category: categoryValue },
         });
         dispatch({
           type: 'meeting/fetchMeetingsByUserId',
@@ -252,6 +253,28 @@ const ResearchTabs = ({
     });
     setEnrollModalVisible(false);
   };
+  const renderCategories = () => {
+    const categoryMap = {
+      video: (
+        <Radio.Group onChange={onChange} value={categoryValue}>
+          {VIDEO_CATEGORY.map((c) => (
+            <Radio value={c}>{c}</Radio>
+          ))}
+        </Radio.Group>
+      ),
+      meeting: (
+        <Radio.Group onChange={onChange} value={categoryValue}>
+          {MEETING_CATEGORY.map((c) => (
+            <Radio value={c}>{c}</Radio>
+          ))}
+        </Radio.Group>
+      ),
+    };
+    return categoryMap[currentModal];
+  };
+  const onChange = (e) => {
+    setCategoryValue(e.target.value);
+  };
   const handleLike = async (e, item) => {
     e.stopPropagation();
     let newLike = item.like;
@@ -285,17 +308,18 @@ const ResearchTabs = ({
         });
       },
     };
-    likeMap[content]();
+    await likeMap[content]();
+    contentMap[content]();
   };
-  const renderDescription = (item) => {
-    return item.instructor ? (
-      <p>{item.link}</p>
-    ) : (
-      <>
-        <img src={require('@/images/video-thumbnail.jpeg')} />
-        <p>{item.link}</p>
-      </>
-    );
+  const renderImage = (item) => {
+    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    return item.category ? (
+      <Image
+        preview={false}
+        className={styles['research-tabs__image']}
+        src={require(`@/images/${type}-${item.category}.png`)}
+      />
+    ) : null;
   };
   const openQuestionModal = async (e, item) => {
     e.stopPropagation();
@@ -431,7 +455,11 @@ const ResearchTabs = ({
               <List.Item.Meta
                 className={styles['research-tabs__meta']}
                 title={item.title}
-                description={renderDescription(item)}
+                description={
+                  <>
+                    {renderImage(item)} <a>{item.link}</a>
+                  </>
+                }
               />
             )}
             {!isProfile && !item.like.includes(currentUser._id) && (
@@ -495,7 +523,6 @@ const ResearchTabs = ({
         className={styles['research-tabs__question-modal']}
       >
         <List
-          //   itemLayout="vertical"
           pagination={{
             pageSize: 8,
           }}
@@ -598,6 +625,20 @@ const ResearchTabs = ({
           >
             <Input />
           </Form.Item>
+          {currentModal !== 'article' && (
+            <Form.Item
+              name="category"
+              label="Category"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please choose category!',
+                },
+              ]}
+            >
+              {renderCategories()}
+            </Form.Item>
+          )}
           {currentModal === 'article' && (
             <Form.Item name="text" label="Content">
               <ReactQuill className={styles['research-tabs__ql-editor']} />
@@ -641,7 +682,16 @@ const ResearchTabs = ({
             </>
           )}
           {(currentModal === 'video' || currentModal === 'meeting') && (
-            <Form.Item name="link" label="Link">
+            <Form.Item
+              name="link"
+              label="Link"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input link!',
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
           )}

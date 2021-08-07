@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 import styles from './index.less';
-import { List, Row, Col, Modal, Form, Button, Input } from 'antd';
+import { List, Row, Col, Modal, Form, Button, Input, Image } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
@@ -10,6 +10,7 @@ import {
   CommentOutlined,
   LikeFilled,
   HeartFilled,
+  ContainerOutlined,
 } from '@ant-design/icons';
 const ResearcherItem = ({
   dispatch,
@@ -44,6 +45,26 @@ const ResearcherItem = ({
     }
     setExtendInputIndex('');
   };
+  const contentMap = {
+    article: async () => {
+      await dispatch({
+        type: 'article/fetchArticlesByUserId',
+        payload: user._id,
+      });
+    },
+    video: async () => {
+      await dispatch({
+        type: 'video/fetchVideosByUserId',
+        payload: user._id,
+      });
+    },
+    meeting: async () => {
+      await dispatch({
+        type: 'meeting/fetchMeetingsByUserId',
+        payload: user._id,
+      });
+    },
+  };
   const handleQuestionSubmit = (value) => {
     if (content.text) {
       dispatch({
@@ -64,6 +85,15 @@ const ResearcherItem = ({
         },
       });
     }
+  };
+  const renderImage = (item) => {
+    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    return item.category ? (
+      <Image
+        preview={false}
+        src={require(`@/images/${type}-${item.category}.png`)}
+      />
+    ) : null;
   };
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -98,7 +128,8 @@ const ResearcherItem = ({
         });
       },
     };
-    likeMap[category]();
+    await likeMap[category]();
+    contentMap[category]();
   };
   return (
     <Modal
@@ -133,6 +164,12 @@ const ResearcherItem = ({
     >
       <Row className={styles['researcher-item__main--info']}>
         <h4>{content.title}</h4>
+        {!isEmpty(content.category) && (
+          <>
+            <ContainerOutlined />
+            <span>Category: {content.category}</span>
+          </>
+        )}
         <FieldTimeOutlined />
         <span>
           Create time: {moment(content.createTime).format('DD/MM/YYYY')}
@@ -149,13 +186,11 @@ const ResearcherItem = ({
           {content.description}
         </p>
       )}
-      {content.link && isEmpty(content.instructor) && (
-        <img src={require('@/images/video-thumbnail.jpeg')} />
-      )}
+      {content.category && category !== 'article' && renderImage(content)}
       {content.link && (
-        <p className={styles['researcher-item__main--description']}>
-          Link: {content.link}
-        </p>
+        <a className={styles['researcher-item__main--description']}>
+          {content.link}
+        </a>
       )}
       {isEmpty(content.instructor) && (
         <Row className={styles['researcher-item__comment']}>

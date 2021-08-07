@@ -7,6 +7,7 @@ import {
   notification,
   Form,
   Input,
+  Radio,
   DatePicker,
   TimePicker,
   Button,
@@ -27,10 +28,9 @@ import {
 } from '@ant-design/icons';
 import styles from './index.less';
 import moment from 'moment';
-// import styles from './index.less';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import { VIDEO_CATEGORY, MEETING_CATEGORY } from '@/utils/constants';
 const UploadMaterialModal = ({
   dispatch,
   currentModal,
@@ -45,6 +45,7 @@ const UploadMaterialModal = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [dateString, setDateString] = useState('');
   const [timeString, setTimeString] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
   const [form] = Form.useForm();
   const videoMounted = useRef();
   const articleMounted = useRef();
@@ -89,7 +90,28 @@ const UploadMaterialModal = ({
   const onTimeChange = (time, timeString) => {
     setTimeString(timeString);
   };
-
+  const renderCategories = () => {
+    const categoryMap = {
+      video: (
+        <Radio.Group onChange={onChange} value={categoryValue}>
+          {VIDEO_CATEGORY.map((c) => (
+            <Radio value={c}>{c}</Radio>
+          ))}
+        </Radio.Group>
+      ),
+      meeting: (
+        <Radio.Group onChange={onChange} value={categoryValue}>
+          {MEETING_CATEGORY.map((c) => (
+            <Radio value={c}>{c}</Radio>
+          ))}
+        </Radio.Group>
+      ),
+    };
+    return categoryMap[currentModal];
+  };
+  const onChange = (e) => {
+    setCategoryValue(e.target.value);
+  };
   const handleCancel = () => {
     setDateString('');
     setTimeString('');
@@ -113,6 +135,7 @@ const UploadMaterialModal = ({
       payload: {
         ...values,
         author: user._id,
+        category: categoryValue,
       },
     });
   };
@@ -126,6 +149,7 @@ const UploadMaterialModal = ({
           dateString + ' ' + timeString,
           'YYYY-MM-DD HH:mm:ss',
         ).format('MM/DD/YYYY HH:mm:ss'),
+        category: categoryValue,
       },
     });
   };
@@ -209,6 +233,20 @@ const UploadMaterialModal = ({
         >
           <Input />
         </Form.Item>
+        {currentModal !== 'article' && (
+          <Form.Item
+            name="category"
+            label="Category"
+            rules={[
+              {
+                required: true,
+                message: 'Please choose category!',
+              },
+            ]}
+          >
+            {renderCategories()}
+          </Form.Item>
+        )}
         {currentModal === 'article' && (
           <Form.Item
             name="text"
@@ -224,10 +262,6 @@ const UploadMaterialModal = ({
         )}
         {currentModal === 'meeting' && (
           <>
-            {/* TODO:Notice是不是description */}
-            {/* <Form.Item name="notice" label="Notice">
-              <Input.TextArea />
-            </Form.Item> */}
             <Form.Item
               name="startDate"
               label={
@@ -267,6 +301,12 @@ const UploadMaterialModal = ({
         {(currentModal === 'video' || currentModal === 'meeting') && (
           <Form.Item
             name="link"
+            rules={[
+              {
+                required: true,
+                message: 'Please input link!',
+              },
+            ]}
             label={
               <>
                 <LinkOutlined />
