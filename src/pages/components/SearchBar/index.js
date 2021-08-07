@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Tag, Input, Form, Select, List, Button, Modal } from 'antd';
+import {
+  Row,
+  Col,
+  Tag,
+  Input,
+  Form,
+  Select,
+  List,
+  Button,
+  Modal,
+  Image,
+} from 'antd';
 import styles from './index.less';
 import { isEmpty } from 'lodash';
 import { connect, Dispatch } from 'umi';
@@ -10,6 +21,7 @@ import {
   FieldTimeOutlined,
   UsergroupAddOutlined,
   HeartFilled,
+  ContainerOutlined,
 } from '@ant-design/icons';
 const { Search } = Input;
 const { Option } = Select;
@@ -123,15 +135,15 @@ const SearcherBar = ({
     setIsItemModalVisible(false);
     setEnrollModalVisible(false);
   };
-  const renderDescription = (item) => {
-    return item.instructor ? (
-      <p>{item.link}</p>
-    ) : (
-      <>
-        <img src={require('@/images/video-thumbnail.jpeg')} />
-        <p>{item.link}</p>
-      </>
-    );
+  const renderImage = (item) => {
+    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    return item.category ? (
+      <Image
+        preview={false}
+        className={styles['search-modal__image']}
+        src={require(`@/images/${type}-${item.category}.png`)}
+      />
+    ) : null;
   };
   useEffect(() => {
     setListData(searchArticlesResults);
@@ -276,7 +288,11 @@ const SearcherBar = ({
                 <List.Item.Meta
                   className={styles['search-modal__meta']}
                   title={item.title}
-                  description={renderDescription(item)}
+                  description={
+                    <>
+                      {renderImage(item)} <a>{item.link}</a>
+                    </>
+                  }
                 />
               )}
               {

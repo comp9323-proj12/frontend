@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 import styles from './index.less';
-import { List, Row, Col, Modal, Form, Button, Input } from 'antd';
+import { List, Row, Col, Modal, Form, Button, Input, Image } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
@@ -22,11 +22,7 @@ const ResearcherItem = ({
   questions,
 }) => {
   const [extendInputIndex, setExtendInputIndex] = useState('');
-  const [itemContent, setItemContent] = useState({});
   const currentUser = getSessionStorage('currentUser');
-  // useEffect(()=>{
-  //   setItemContent(content)
-  // },[content])
   const handleReplySubmit = async (value) => {
     await dispatch({
       type: 'question/createReply',
@@ -89,6 +85,15 @@ const ResearcherItem = ({
         },
       });
     }
+  };
+  const renderImage = (item) => {
+    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    return item.category ? (
+      <Image
+        preview={false}
+        src={require(`@/images/${type}-${item.category}.png`)}
+      />
+    ) : null;
   };
   const handleLike = async (e) => {
     e.stopPropagation();
@@ -181,13 +186,11 @@ const ResearcherItem = ({
           {content.description}
         </p>
       )}
-      {content.link && isEmpty(content.instructor) && (
-        <img src={require('@/images/video-thumbnail.jpeg')} />
-      )}
+      {content.category && category !== 'article' && renderImage(content)}
       {content.link && (
-        <p className={styles['researcher-item__main--description']}>
-          Link: {content.link}
-        </p>
+        <a className={styles['researcher-item__main--description']}>
+          {content.link}
+        </a>
       )}
       {isEmpty(content.instructor) && (
         <Row className={styles['researcher-item__comment']}>

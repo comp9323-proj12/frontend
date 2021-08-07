@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   Radio,
+  Image,
   DatePicker,
   TimePicker,
 } from 'antd';
@@ -310,15 +311,15 @@ const ResearchTabs = ({
     await likeMap[content]();
     contentMap[content]();
   };
-  const renderDescription = (item) => {
-    return item.instructor ? (
-      <p>{item.link}</p>
-    ) : (
-      <>
-        <img src={require('@/images/video-thumbnail.jpeg')} />
-        <p>{item.link}</p>
-      </>
-    );
+  const renderImage = (item) => {
+    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    return item.category ? (
+      <Image
+        preview={false}
+        className={styles['research-tabs__image']}
+        src={require(`@/images/${type}-${item.category}.png`)}
+      />
+    ) : null;
   };
   const openQuestionModal = async (e, item) => {
     e.stopPropagation();
@@ -454,7 +455,11 @@ const ResearchTabs = ({
               <List.Item.Meta
                 className={styles['research-tabs__meta']}
                 title={item.title}
-                description={renderDescription(item)}
+                description={
+                  <>
+                    {renderImage(item)} <a>{item.link}</a>
+                  </>
+                }
               />
             )}
             {!isProfile && !item.like.includes(currentUser._id) && (
@@ -677,7 +682,16 @@ const ResearchTabs = ({
             </>
           )}
           {(currentModal === 'video' || currentModal === 'meeting') && (
-            <Form.Item name="link" label="Link">
+            <Form.Item
+              name="link"
+              label="Link"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input link!',
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
           )}

@@ -301,6 +301,12 @@ const UploadMaterialModal = ({
         {(currentModal === 'video' || currentModal === 'meeting') && (
           <Form.Item
             name="link"
+            rules={[
+              {
+                required: true,
+                message: 'Please input link!',
+              },
+            ]}
             label={
               <>
                 <LinkOutlined />
