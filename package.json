@@ -1,6 +1,8 @@
 {
   "private": true,
+  "homepage": "https://comp9323-proj12.github.io/frontend/",
   "scripts": {
+    "deploy": "gh-pages -d dist",
     "start": "umi dev",
     "build": "umi build",
     "postinstall": "umi generate tmp",
@@ -23,6 +25,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
     "axios": "^0.21.1",
+    "gh-pages": "^3.2.3",
     "moment": "^2.29.1",
     "react-quill": "^1.3.5",
     "umi": "^3.4.25"
