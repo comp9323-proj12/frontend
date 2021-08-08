@@ -11,6 +11,7 @@ import {
   Image,
   DatePicker,
   TimePicker,
+  Row,
 } from 'antd';
 import { getSessionStorage } from '@/utils/storageHelper';
 import {
@@ -26,8 +27,13 @@ import {
   UsergroupAddOutlined,
   HeartFilled,
   LikeFilled,
+  ContainerTwoTone,
 } from '@ant-design/icons';
-import { VIDEO_CATEGORY, MEETING_CATEGORY } from '@/utils/constants';
+import {
+  VIDEO_CATEGORY,
+  MEETING_CATEGORY,
+  CATEGORY_COLOR,
+} from '@/utils/constants';
 import ResearcherItem from '@/pages/Researcher/components/ResearcherItem';
 import moment from 'moment';
 import styles from './index.less';
@@ -357,70 +363,80 @@ const ResearchTabs = ({
             }}
             extra={
               <>
-                {!isProfile &&
-                  content === 'meeting' &&
-                  !item.students?.includes(currentUser._id) && (
+                <Row className={styles['research-tabs__extra']}>
+                  {item.category && (
+                    <span className={styles['research-tabs__category']}>
+                      <ContainerTwoTone
+                        twoToneColor={CATEGORY_COLOR[item.category]}
+                      />
+                      Category: {item.category}
+                    </span>
+                  )}
+                  {!isProfile &&
+                    content === 'meeting' &&
+                    !item.students?.includes(currentUser._id) && (
+                      <>
+                        <Button
+                          className={styles['research-tabs__profile-button']}
+                          onClick={(e) => {
+                            openEnrollModal(e, item);
+                          }}
+                        >
+                          Enroll meeting
+                        </Button>
+                      </>
+                    )}
+                  {isProfile && (
                     <>
+                      {content !== 'meeting' && (
+                        <Button
+                          className={styles['research-tabs__profile-button']}
+                          onClick={(e) => {
+                            openQuestionModal(e, item);
+                          }}
+                        >
+                          <QuestionCircleTwoTone />
+                          Check Question
+                        </Button>
+                      )}
                       <Button
                         className={styles['research-tabs__profile-button']}
                         onClick={(e) => {
-                          openEnrollModal(e, item);
+                          e.stopPropagation();
+                          setCurrentModal(
+                            item.instructor
+                              ? 'meeting'
+                              : item.link
+                              ? 'video'
+                              : 'article',
+                          );
+                          editForm.setFieldsValue({
+                            ...item,
+                            startDate: '',
+                            startTime: '',
+                          });
+                          setProfileItem(item);
+                          setEditModalVisible(true);
                         }}
                       >
-                        Enroll meeting
+                        <EditTwoTone />
+                        edit
+                      </Button>
+                      <Button
+                        className={styles['research-tabs__profile-button']}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setProfileItem(item);
+                          setDeleteModalVisible(true);
+                          // handleDelete(item);
+                        }}
+                      >
+                        <DeleteTwoTone />
+                        delete
                       </Button>
                     </>
                   )}
-                {isProfile && (
-                  <>
-                    {content !== 'meeting' && (
-                      <Button
-                        className={styles['research-tabs__profile-button']}
-                        onClick={(e) => {
-                          openQuestionModal(e, item);
-                        }}
-                      >
-                        <QuestionCircleTwoTone />
-                        Check Question
-                      </Button>
-                    )}
-                    <Button
-                      className={styles['research-tabs__profile-button']}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCurrentModal(
-                          item.instructor
-                            ? 'meeting'
-                            : item.link
-                            ? 'video'
-                            : 'article',
-                        );
-                        editForm.setFieldsValue({
-                          ...item,
-                          startDate: '',
-                          startTime: '',
-                        });
-                        setProfileItem(item);
-                        setEditModalVisible(true);
-                      }}
-                    >
-                      <EditTwoTone />
-                      edit
-                    </Button>
-                    <Button
-                      className={styles['research-tabs__profile-button']}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setProfileItem(item);
-                        setDeleteModalVisible(true);
-                        // handleDelete(item);
-                      }}
-                    >
-                      <DeleteTwoTone />
-                      delete
-                    </Button>
-                  </>
-                )}
+                </Row>
               </>
             }
           >
