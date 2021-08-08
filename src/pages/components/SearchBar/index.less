@@ -17,6 +17,19 @@
       }
     }
   }
+  &__extra {
+    flex-flow: column wrap;
+    div:first-child {
+      padding-bottom: 10px;
+      position: relative;
+      right: 18px;
+      :global {
+        .anticon-container {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
   &__list-item {
     padding-bottom: 50px;
   }
@@ -39,10 +52,16 @@
   }
   &__tags {
     border-radius: 4px;
+    margin-left: 6px;
   }
 }
 
 .search-bar {
+  :global {
+    .ant-form-item-label > label {
+      color: white;
+    }
+  }
   &__select {
     display: inline-block;
     margin-right: 20px;

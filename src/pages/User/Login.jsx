@@ -11,6 +11,7 @@ import {
   notification,
   DatePicker,
   Select,
+  Image,
 } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import styles from './Login.less';
@@ -81,8 +82,16 @@ const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
     <Row>
       <Col className={styles['login__banner']} span={8}>
         <Carousel autoplay autoplaySpeed={3000}>
-          <img src={require('@/images/login-banner_1.png')} alt="banner-1" />
-          <img src={require('@/images/login-banner_2.png')} alt="banner-2" />
+          <Image
+            preview={false}
+            src={require('@/images/login-banner_1.png')}
+            alt="banner-1"
+          />
+          <Image
+            preview={false}
+            src={require('@/images/login-banner_2.png')}
+            alt="banner-2"
+          />
         </Carousel>
       </Col>
       <Col className={styles['login__main']} span={16}>

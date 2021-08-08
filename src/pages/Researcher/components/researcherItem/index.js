@@ -188,7 +188,16 @@ const ResearcherItem = ({
       )}
       {content.category && category !== 'article' && renderImage(content)}
       {content.link && (
-        <a className={styles['researcher-item__main--description']}>
+        <a
+          target="_blank"
+          href={
+            content.link.startsWith('http://') ||
+            content.link.startsWith('https://')
+              ? content.link
+              : `http://${content.link}`
+          }
+          className={styles['researcher-item__main--description']}
+        >
           {content.link}
         </a>
       )}

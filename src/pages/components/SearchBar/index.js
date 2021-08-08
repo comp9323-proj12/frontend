@@ -21,8 +21,11 @@ import {
   FieldTimeOutlined,
   UsergroupAddOutlined,
   HeartFilled,
+  TagsTwoTone,
   ContainerOutlined,
+  ContainerTwoTone,
 } from '@ant-design/icons';
+import { CATEGORY_COLOR } from '@/utils/constants';
 const { Search } = Input;
 const { Option } = Select;
 const SearcherBar = ({
@@ -205,7 +208,7 @@ const SearcherBar = ({
         maskClosable={!isItemModalVisible}
         onCancel={handleSearchCancel}
         destroyOnClose={true}
-        width={1200}
+        width={1600}
       >
         <List
           size="large"
@@ -276,9 +279,15 @@ const SearcherBar = ({
                     <>
                       <span>Author: {item.author.name}</span>
                       <p>
-                        {item.text.length > 50
-                          ? item.text.slice(0, 50) + '...'
-                          : item.text}
+                        {(() => {
+                          const rawDescription = item.text.replace(
+                            /<.*?>/g,
+                            '',
+                          );
+                          return rawDescription.length > 50
+                            ? rawDescription.slice(0, 50) + '...'
+                            : rawDescription;
+                        })()}
                       </p>
                     </>
                   }
@@ -290,27 +299,56 @@ const SearcherBar = ({
                   title={item.title}
                   description={
                     <>
-                      {renderImage(item)} <a>{item.link}</a>
+                      {renderImage(item)}{' '}
+                      <a
+                        target="_blank"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                        href={
+                          item.link.startsWith('http://') ||
+                          item.link.startsWith('https://')
+                            ? item.link
+                            : `http://${item.link}`
+                        }
+                      >
+                        {item.link}
+                      </a>
                     </>
                   }
                 />
               )}
-              {
-                <span className={styles['search-modal__like']}>
-                  <HeartFilled /> {item.like.length}
-                </span>
-              }
-              {item?.tags?.map((tag, index) => {
-                return (
-                  <Tag
-                    key={index}
-                    className={styles['search-modal__tags']}
-                    color="#b3d7ff"
-                  >
-                    {tag}
-                  </Tag>
-                );
-              })}
+              <Row className={styles['search-modal__extra']}>
+                <Row>
+                  {item.category && (
+                    <span className={styles['research-tabs__category']}>
+                      <ContainerTwoTone
+                        twoToneColor={CATEGORY_COLOR[item.category]}
+                      />
+                      Category: {item.category}
+                    </span>
+                  )}
+                </Row>
+                <Row>
+                  {
+                    <span className={styles['search-modal__like']}>
+                      <HeartFilled /> {item.like.length}
+                    </span>
+                  }
+                  {!isEmpty(item?.tags) && <TagsTwoTone />}
+                  {item?.tags?.map((tag, index) => {
+                    return (
+                      <Tag
+                        key={index}
+                        className={styles['search-modal__tags']}
+                        color="#b3d7ff"
+                      >
+                        {tag}
+                      </Tag>
+                    );
+                  })}
+                </Row>
+              </Row>
             </List.Item>
           )}
         ></List>
