@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { connect, Link, Dispatch } from 'umi';
 import { isEmpty } from 'lodash';
-import { Button, List, Avatar, Modal, Image } from 'antd';
+import { Button, List, Avatar, Modal, Image, Row } from 'antd';
 import ResearcherHomePage from './ResearcherHomePage';
 import styles from './ResearcherList.less';
+import { CATEGORY_COLOR } from '@/utils/constants';
 import ResearcherItem from './components/ResearcherItem';
 import {
   TeamOutlined,
   TrophyOutlined,
   TrophyTwoTone,
   StarOutlined,
+  ContainerTwoTone,
 } from '@ant-design/icons';
 
 const ResearcherList = ({
@@ -279,7 +281,21 @@ const ResearcherList = ({
             <List.Item.Meta
               className={styles['researcher-list__item--material']}
               title={item.title}
-              description={item.description}
+              description={
+                <>
+                  <Row className={styles['researcher-list__category']}>
+                    {item.category && (
+                      <span>
+                        <ContainerTwoTone
+                          twoToneColor={CATEGORY_COLOR[item.category]}
+                        />
+                        Category: {item.category}
+                      </span>
+                    )}
+                  </Row>
+                  {item.description}
+                </>
+              }
             />
             {renderImage(item)}
           </List.Item>
@@ -315,7 +331,21 @@ const ResearcherList = ({
             <List.Item.Meta
               className={styles['researcher-list__item--material']}
               title={item.title}
-              description={item.description}
+              description={
+                <>
+                  <Row className={styles['researcher-list__category']}>
+                    {item.category && (
+                      <span>
+                        <ContainerTwoTone
+                          twoToneColor={CATEGORY_COLOR[item.category]}
+                        />
+                        Category: {item.category}
+                      </span>
+                    )}
+                  </Row>
+                  {item.description}
+                </>
+              }
             />
             {renderImage(item)}
           </List.Item>
