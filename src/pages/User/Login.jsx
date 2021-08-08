@@ -169,8 +169,12 @@ const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
                   </Form.Item>
                 </Form>
               </Col>
-              <Col span={12} offset={12}>
-                <Carousel autoplay autoplaySpeed={3000}>
+              <Col span={12}>
+                <Carousel
+                  autoplay
+                  autoplaySpeed={3000}
+                  className={styles['login__carousel']}
+                >
                   <img
                     src={require('@/images/login-banner_1.png')}
                     alt="banner-1"
