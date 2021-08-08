@@ -158,14 +158,6 @@ const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
           </Form.Item>
         </Form>
       </Col>
-      {/* <Modal
-        title="Login Failed"
-        footer={null}
-        visible={isLoginModalVisible}
-        onCancel={handleCancel}
-      >
-        <p>Login failed, please check your username and password!</p>
-      </Modal> */}
       <Modal
         title="Register"
         footer={null}

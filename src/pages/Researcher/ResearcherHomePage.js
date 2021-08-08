@@ -12,7 +12,7 @@ import {
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 const { TabPane } = Tabs;
-const ResearcherHomePage = ({ dispatch, activateContent }) => {
+const ResearcherHomePage = ({ activateContent }) => {
   const [activateUser, setActivateUser] = useState({});
   const [isProfile, setIsProfile] = useState(false);
   const currentUser = getSessionStorage('currentUser');

@@ -139,7 +139,11 @@ const SearcherBar = ({
     setEnrollModalVisible(false);
   };
   const renderImage = (item) => {
-    const type = item.instructor ? 'meeting' : item.link ? 'video' : 'article';
+    const type = !isEmpty(item.instructor)
+      ? 'meeting'
+      : item.link
+      ? 'video'
+      : 'article';
     return item.category ? (
       <Image
         preview={false}
