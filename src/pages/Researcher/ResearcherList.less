@@ -1,5 +1,12 @@
 .researcher-list {
   padding: 0 10px;
+  &__category {
+    display: flex;
+    justify-content: center;
+    span {
+      margin-right: 5px !important;
+    }
+  }
   &__item {
     background-color: white;
     box-shadow: 3px 3px 2px #e6e6e6;
@@ -12,7 +19,7 @@
     }
     &--material {
       text-align: center;
-      height: 51px;
+      height: 73px;
     }
     :global {
       .ant-list-item-meta-title {
@@ -22,7 +29,7 @@
         span {
           margin-top: -1px;
           font-size: 22px;
-          color: #b3d7ff;
+          color: #4da3ff;
           cursor: default;
         }
       }
