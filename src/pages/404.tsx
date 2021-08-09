@@ -2,7 +2,7 @@ import { Button, Result } from 'antd';
 import React from 'react';
 import { history } from 'umi';
 
-/* 约定 src/pages/404.tsx 为 404 页面，需返回 React 组件。
+/* 404 page ,not used currently
 [
   { exact: true, path: '/', component: '@/pages/index' },
   { exact: true, path: '/users', component: '@/pages/users' },

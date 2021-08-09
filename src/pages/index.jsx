@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { connect, Dispatch } from 'umi';
+import { connect } from 'umi';
 import styles from './index.less';
 import Login from './User/Login';
 import { isEmpty } from 'lodash';
 import Home from './Home';
 import { getSessionStorage } from '@/utils/storageHelper';
-const IndexPage = ({ dispatch, currentUser }) => {
+
+/**
+ * @description index page to show login page or home page
+ * @param {object} currentUser current logged in user
+ */
+const IndexPage = ({ currentUser }) => {
   const [currentUserSession, setCurrentUserSession] = useState(
     getSessionStorage('currentUser'),
   );

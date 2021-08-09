@@ -8,6 +8,10 @@ import {
   GlobalOutlined,
   MailOutlined,
 } from '@ant-design/icons';
+/**
+ * @description component shows personal detail info
+ * @param {object} user info of user
+ */
 export const PersonalDetails = ({ user }) => {
   return (
     <Row className={styles['personal-details']}>

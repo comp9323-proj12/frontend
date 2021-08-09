@@ -1,6 +1,9 @@
 import React from 'react';
 import { Row, Col, Space } from 'antd';
 import styles from './index.less';
+/**
+ * @description footer
+ */
 const copyright = () => {
   return (
     <Row>

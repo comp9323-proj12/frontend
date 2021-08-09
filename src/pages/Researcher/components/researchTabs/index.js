@@ -41,6 +41,16 @@ import { isEmpty } from 'lodash';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+/**
+ * @description tab to show items list include video, meeting and article
+ * @param {string} content current tab is on meeting, video or article
+ * @param {object} user master of current displayed items and tab.
+ * @param {Array<object>} userArticles articles of user
+ * @param {Array<object>} userVideos videos of user
+ * @param {Array<object>} userMeetings meetings of user
+ * @param {boolean} isProfile whether user gets into his own profile page or browsing other researcher's home page.
+ * @param {Array<object>} questions questions list of an item
+ */
 const ResearchTabs = ({
   dispatch,
   content,
