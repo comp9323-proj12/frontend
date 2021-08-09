@@ -14,6 +14,13 @@ import {
   ContainerTwoTone,
 } from '@ant-design/icons';
 
+/**
+ * @description researchers list as well as popular item list showed after login by default
+ * @param {Array<object>} researchers redux state to store all researchers
+ * @param {Array<object>} searchMeetingsResults meetings' search results with specific condition query
+ * @param {Array<object>} searchVideosResults videos' search results with specific condition query
+ * @param {Array<object>} searchArticlesResults articles' search results with specific condition query
+ */
 const ResearcherList = ({
   dispatch,
   researchers,

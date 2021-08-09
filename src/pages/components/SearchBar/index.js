@@ -28,6 +28,12 @@ import {
 import { CATEGORY_COLOR } from '@/utils/constants';
 const { Search } = Input;
 const { Option } = Select;
+/**
+ * @description search bar and corresponding results
+ * @param {Array<object>} searchArticlesResults list of searched articles
+ * @param {Array<object>} searchMeetingsResults list of searched meetings
+ * @param {Array<object>} searchVideosResults list of searched videos
+ */
 const SearcherBar = ({
   searchArticlesResults,
   searchMeetingsResults,

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { connect, Dispatch } from 'umi';
 import styles from './index.less';
 import { Avatar } from 'antd';
+/**
+ * @description Logo button, click to return home page
+ */
 const Logo = ({ dispatch }) => {
   const returnHome = () => {
     dispatch({

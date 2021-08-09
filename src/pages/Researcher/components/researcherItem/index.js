@@ -12,6 +12,16 @@ import {
   HeartFilled,
   ContainerOutlined,
 } from '@ant-design/icons';
+
+/**
+ * @description modal component to display infos of all sorts of items include meeting, video and article
+ * @param {object} user info of user who is the master of this item.
+ * @param {boolean} visible modal is visible or not
+ * @param {object} content info of showed item
+ * @param {string} category item is a meeting, video or article
+ * @param {function} handleCancel close modal callback function
+ * @param {Array<object>} questions questions with replies of corresponeding item
+ */
 const ResearcherItem = ({
   dispatch,
   user,

@@ -31,6 +31,17 @@ import moment from 'moment';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { VIDEO_CATEGORY, MEETING_CATEGORY } from '@/utils/constants';
+/**
+ * @description upload modal, include meetings, videos and articles
+ * @param {string} currentModal material's category of current opened modal
+ * @param {function} closeCurrentModal close current modal callback function
+ * @param {number} createMeetingStatus response status code of uploading meeting behaviour
+ * @param {number} createVideoStatus response status code of uploading video behaviour
+ * @param {number} createArticleStatus response status code of uploading article behaviour
+ * @param {boolean} reversalMeetingStatus flag use to identify notification info between first render component and excute upload functions
+ * @param {boolean} reversalVideoStatus flag use to identify notification info between first render component and excute upload functions
+ * @param {boolean} reversalArticleStatus flag use to identify notification info between first render component and excute upload functions
+ */
 const UploadMaterialModal = ({
   dispatch,
   currentModal,

@@ -16,6 +16,9 @@ import { getSessionStorage } from '@/utils/storageHelper';
 import styles from './index.less';
 import UploadMaterialModal from '@/pages/components/UploadMaterialModal';
 
+/**
+ * @description user menu
+ */
 const UserMenu = ({ dispatch }) => {
   const [currentModal, setCurrentModal] = useState('');
   const currentUser = getSessionStorage('currentUser');

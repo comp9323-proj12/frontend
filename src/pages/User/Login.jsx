@@ -18,6 +18,11 @@ import styles from './Login.less';
 import { isEmpty } from 'lodash';
 import { getSessionStorage } from '@/utils/storageHelper';
 
+/**
+ * @description component includes login form and register modal
+ * @param {boolean} registerFlag flag use to identify notification info between first render component and excute register operation
+ * @param {boolean} reversalRegistered flag use to trigger component update when register
+ */
 const Login = ({ dispatch, registerFlag, reversalRegistered }) => {
   const currentUser = getSessionStorage('currentUser');
   const [isRegisterModalVisible, setIsRegisterModalVisible] = useState(false);

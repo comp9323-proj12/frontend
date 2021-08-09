@@ -17,7 +17,11 @@ import {
 
 const { Header, Content, Footer } = Layout;
 
-const Home = ({ dispatch, currentPage, activateContent }) => {
+/**
+ * @description home page to render corresponding component according to redux state value
+ * @param {string} currentPage record current page with routeMap to render corresponding components.
+ */
+const Home = ({ dispatch, currentPage }) => {
   const [currentPageRoute, setCurrentPageRoute] = useState('home');
   useEffect(() => {
     setCurrentPageRoute(getSessionStorage('currentPage') || 'home');
@@ -60,10 +64,7 @@ const Home = ({ dispatch, currentPage, activateContent }) => {
   );
 };
 
-export default connect(
-  ({ login: { currentUser }, page: { currentPage, activateContent } }) => ({
-    currentUser,
-    currentPage,
-    activateContent,
-  }),
-)(Home);
+export default connect(({ login: { currentUser }, page: { currentPage } }) => ({
+  currentUser,
+  currentPage,
+}))(Home);

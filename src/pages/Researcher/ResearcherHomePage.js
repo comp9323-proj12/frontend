@@ -12,6 +12,11 @@ import {
   UsergroupAddOutlined,
 } from '@ant-design/icons';
 const { TabPane } = Tabs;
+
+/**
+ * @description researcher's profile page
+ * @param {object} activateContent redux state to store info of the researcher who is currently browsed by user
+ */
 const ResearcherHomePage = ({ activateContent }) => {
   const [activateUser, setActivateUser] = useState({});
   const [isProfile, setIsProfile] = useState(false);
